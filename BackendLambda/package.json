@@ -1,0 +1,25 @@
+{
+  "name": "discordgems",
+  "version": "1.0.0",
+  "description": "A discord bot that allows a server users to gift gems to another user of the same server. It uses aws serverless services as backend.",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CraftsmenLtd/DiscordGems.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CraftsmenLtd/DiscordGems/issues"
+  },
+  "homepage": "https://github.com/CraftsmenLtd/DiscordGems#readme",
+  "dependencies": {
+    "tweetnacl": "^1.0.3"
+  },
+  "devDependencies": {
+    "jest": "^29.4.3"
+  }
+}
