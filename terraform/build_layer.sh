@@ -12,7 +12,7 @@ set -e
     TARGET_DIR=$DESTINATION_DIR/$ZIPFILE_NAME
     mkdir -p "$TARGET_DIR"/python
     
-    (cd "$MODULE_DIR"/../../ && pip3 install -r requirements.txt -t "$TARGET_DIR"/python)
+    (cd "$MODULE_DIR"/../ && pip3 install -r requirements.txt -t "$TARGET_DIR"/python)
     (cd "$TARGET_DIR" && zip -r "$TARGET_DIR".zip ./* -x "*.dist-info*" -x "*__pycache__*" -x "*.egg-info*")
     
     rm -r "$TARGET_DIR"

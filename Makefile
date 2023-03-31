@@ -11,8 +11,8 @@ install-dependencies:
 .PHONY: install-dependencies
 
 validate-terraform:
-	terraform init -input=false $(TF_BACKEND_CONFIG)
-	terraform validate
+	terraform -chdir=terraform init -input=false $(TF_BACKEND_CONFIG)
+	terraform -chdir=terraform validate
 .PHONY: validate-terraform
 
 deploy:
