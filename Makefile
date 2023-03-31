@@ -27,7 +27,7 @@ register-bot:
 	cd utils && python setup_bot.py
 
 build-runner-image:
-	docker build -t $(RUNNER_IMAGE_NAME) $(DOCKER_BUILD_EXTRA_ARGS)
+	docker build -t $(RUNNER_IMAGE_NAME) $(DOCKER_BUILD_EXTRA_ARGS) .
 .PHONY: build-runner-image
 
 run-command-in-container-%:
