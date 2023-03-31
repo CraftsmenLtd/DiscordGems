@@ -3,7 +3,6 @@ DOCKER_ENV:=-e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY -e AWS_DEFAULT_REGION 
 DOCKER_RUN_MOUNT_OPTIONS:=-v ${CURDIR}:/app -w /app
 RUNNER_IMAGE_NAME?=runner-image
 TF_BACKEND_CONFIG=--backend-config="bucket=$(TF_BACKEND_BUCKET_NAME)" --backend-config="key=$(TF_BACKEND_BUCKET_KEY)" --backend-config="region=$(TF_BACKEND_BUCKET_REGION)"
-TF_VARS?=
 
 MAKEFLAGS+= --no-print-directory
 

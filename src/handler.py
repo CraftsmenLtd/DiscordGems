@@ -12,7 +12,7 @@ from communication import send_channel_message
 from constants import load_environment_variables
 from dynamo import (get_monthly_rank, insert_gem_to_dynamo,
                     sender_gem_count_today)
-from secrets_manager_helper import SecretsManagerHelper
+from secrets_manager_helper import get_secret
 
 PING_PONG = {"type": 1}
 
@@ -33,7 +33,8 @@ def handler(event, _):
 
     # verify the signature
     try:
-        verify_signature(event, env_vars.discord_public_key)
+        # TODO: add discord public key in lambda cache
+        verify_signature(event, get_secret(env_vars.discord_public_key_secrets_arn))
     except Exception as e:
         raise Exception(f"[UNAUTHORIZED] Invalid request signature: {e}")
 
@@ -67,9 +68,9 @@ def verify_signature(event: Dict[str, Any], public_key: str):
 
 def gem_handler(body: Dict[str, Any], env_vars):
     """Handle gems and respond to user"""
-    if body.get("channel_id") != env_vars.gems_discord_channel:
+    if body.get("channel_id") != env_vars.discord_gems_channel:
         return slash_command_response(
-            f"Use channel <#{env_vars.gems_discord_channel}> to give 💎"
+            f"Use channel <#{env_vars.discord_gems_channel}> to give 💎"
         )
 
     try:
@@ -109,11 +110,9 @@ def gem_handler(body: Dict[str, Any], env_vars):
 
 
 def _handle_trigger_from_cron(env_vars):
-    secret_manager: SecretsManagerHelper = SecretsManagerHelper()
-    credentials: Dict[str, Any] = secret_manager.get_secret(
-        env_vars.credentials_secretsmanager_name
+    discord_bot_token: str = get_secret(
+        env_vars.discord_bot_token_secret_arn
     )
-    discord_bot_token: str = credentials[env_vars.discord_bot_token_secret_name]
 
     last_month_last_day = datetime.datetime.today().replace(day=1) - datetime.timedelta(
         days=1
@@ -126,7 +125,7 @@ def _handle_trigger_from_cron(env_vars):
 
     send_channel_message(
         discord_bot_token,
-        int(env_vars.gems_discord_channel),
+        int(env_vars.discord_gems_channel),
         message
     )
 

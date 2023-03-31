@@ -9,12 +9,11 @@ locals {
       memory_size      = 1024
       env_variables = {
         gems_table_name      = aws_dynamodb_table.gems_table.name
-        discord_public_key   = var.discord_public_key
+        discord_public_key_secrets_arn   = var.discord_public_key_secrets_arn
         max_gems_per_day     = var.max_gems_per_day
-        gems_discord_channel = var.gems_discord_channel
+        discord_gems_channel = var.discord_gems_channel
         monthly_cron_rule    = aws_cloudwatch_event_rule.monthly_cron_rule.arn
-        credentials_secretsmanager_name = var.credentials_secretsmanager_name
-        discord_bot_token_secret_name = var.discord_bot_token_secret_name
+        discord_bot_token_secret_arn = var.discord_bot_token_secret_arn
       }
     }
   }
@@ -35,10 +34,10 @@ resource "aws_lambda_function" "lambda_functions" {
   source_code_hash = data.archive_file.lambda_files[each.key].output_base64sha256
   handler          = each.value.handler
   role             = aws_iam_role.lambda_roles[each.key].arn
-  runtime          = var.lambda_python_version
+  runtime          = local.lambda_python_version
   timeout          = lookup(each.value, "timeout", 120)
   memory_size      = lookup(each.value, "memory_size", 128)
-  layers           = [var.lambda_layer_arn]
+  layers           = [aws_lambda_layer_version.lambda_layer.arn]
 
   environment {
     variables = lookup(each.value, "env_variables", {})
