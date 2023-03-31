@@ -38,7 +38,7 @@ jobs:
       uses: actions/checkout@v3
 
     - name: Build Runner Image
-      run: RUNNER_IMAGE_NAME=$RUNNER_IMAGE_NAME make build-runner-image
+      run: make build-runner-image
 
     - name: Run Terraform Validation
       run: make run-command-in-container-validate-terraform
