@@ -1,3 +1,5 @@
+import os
+
 from register_bot_command import register_command
 
 COMMAND = os.environ["COMMAND"]

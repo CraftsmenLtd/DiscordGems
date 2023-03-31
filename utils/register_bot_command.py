@@ -15,7 +15,7 @@ def register_command(command: str, app_id: str, guild_id: str, bot_token: str):
     url = f"https://discord.com/api/v8/applications/{app_id}/guilds/{guild_id}/commands"
 
     json = {
-        "name": "gem",
+        "name": command,
         "type": 1,
         "description": "Appreciate someone by gem",
         "options": [
