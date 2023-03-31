@@ -16,15 +16,15 @@ validate-terraform:
 .PHONY: validate-terraform
 
 deploy:
-	terraform init -input=false $(TF_BACKEND_CONFIG)
-	terraform plan -input=false -out=tfplan-apply $(TF_VARS)
-	terraform apply -input=false tfplan-apply
+	terraform -chdir=terraform init -input=false $(TF_BACKEND_CONFIG)
+	terraform -chdir=terraform plan -input=false -out=tfplan-apply $(TF_VARS)
+	terraform -chdir=terraform apply -input=false tfplan-apply
 .PHONY: deploy
 
 destroy:
-	terraform init -input=false $(TF_BACKEND_CONFIG)
-	terraform plan -input=false -out=tfplan-destroy -destroy $(TF_VARS)
-	terraform destroy -input=false tfplan-destroy
+	terraform -chdir=terraform init -input=false $(TF_BACKEND_CONFIG)
+	terraform -chdir=terraform plan -input=false -out=tfplan-destroy -destroy $(TF_VARS)
+	terraform -chdir=terraform destroy -input=false tfplan-destroy
 .PHONY: destroy
 
 register-bot:
