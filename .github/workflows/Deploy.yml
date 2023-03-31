@@ -1,0 +1,54 @@
+name: 'Deploy Infrastructure'
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    shell: bash
+
+env:
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+  APP_ID: ${{ secrets.APP_ID }}
+  GUILD_ID: ${{ secrets.GUILD_ID }}
+  BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+  COMMAND: ${{ vars.COMMAND }}
+  TF_BACKEND_BUCKET_NAME: ${{ secrets.TF_BACKEND_BUCKET_NAME }}
+  TF_BACKEND_BUCKET_KEY: ${{ secrets.TF_BACKEND_BUCKET_KEY }}
+  TF_BACKEND_BUCKET_REGION: ${{ secrets.TF_BACKEND_BUCKET_REGION }}
+  TF_VARS: >-
+     -var="max_gems_per_day=${{ vars.MAX_GEMS_PER_DAY }}" 
+     -var="discord_public_key_secrets_arn=${{ secrets.DISCORD_PUBLIC_KEY_SECRETS_ARN }}" 
+     -var="discord_gems_channel=${{ vars.DISCORD_GEMS_CHANNEL }}" 
+     -var="discord_bot_token_secret_arn=${{ secrets.DISCORD_BOT_TOKEN_SECRETS_ARN }}" 
+     -var="prefix=${{ vars.PREFIX }}"
+  RUNNER_IMAGE_NAME: github-runner-image
+
+jobs:
+
+  deploy-terraform:
+    name: Deploy Terraform
+    runs-on: ubuntu-22.04
+    environment: production
+
+    steps:
+    - name: Checkout Branch
+      uses: actions/checkout@v3
+
+    - name: Build Runner Image
+      run: make build-runner-image
+
+    - name: Run Terraform Validation
+      run: make run-command-in-container-validate-terraform
+    
+    - name: Register Bot
+      run: make run-command-in-container-register-bot
+
+    - name: Deploy
+      run: make run-command-in-container-deploy

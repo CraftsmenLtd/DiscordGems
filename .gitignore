@@ -1,0 +1,9 @@
+.idea
+.vscode
+.venv
+venv
+__pycache__
+lambda_zip
+layer_zip
+.terraform*
+.pytest_cache
