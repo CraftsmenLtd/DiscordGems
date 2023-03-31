@@ -11,7 +11,7 @@ variable "discord_public_key_secrets_arn" {
 variable "max_gems_per_day" {
   type        = number
   description = "Max gems for an user per day"
-  default = 5
+  default     = 5
 }
 
 variable "discord_gems_channel" {
@@ -22,5 +22,5 @@ variable "discord_gems_channel" {
 variable "discord_bot_token_secret_arn" {
   type        = string
   description = "Discord bot token arn of ssm"
-  sensitive = true
+  sensitive   = true
 }
