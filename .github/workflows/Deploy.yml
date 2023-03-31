@@ -46,6 +46,9 @@ jobs:
 
     - name: Run Terraform Validation
       run: make run-command-in-container-validate-terraform
+
+    - name: Install Python Dependencies
+      run: make run-command-in-container-install-dependencies
     
     - name: Register Bot
       run: make run-command-in-container-register-bot

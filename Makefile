@@ -6,6 +6,10 @@ TF_BACKEND_CONFIG=--backend-config="bucket=$(TF_BACKEND_BUCKET_NAME)" --backend-
 
 MAKEFLAGS+= --no-print-directory
 
+install-dependencies:
+	pip install -r requirements.txt
+.PHONY: install-dependencies
+
 validate-terraform:
 	terraform init -input=false $(TF_BACKEND_CONFIG)
 	terraform validate
