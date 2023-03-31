@@ -2,7 +2,7 @@ locals {
   lambda_options = {
     discord-gems = {
       name             = "discord-gems"
-      source_directory = "src/discord_gems"
+      source_directory = "src"
       policy           = data.aws_iam_policy_document.discord_gems_policy
       handler          = "handler.handler"
       timeout          = 900
@@ -22,7 +22,7 @@ locals {
 data "archive_file" "lambda_files" {
   for_each    = local.lambda_options
   output_path = "${path.module}/lambda_zip/${each.key}.zip"
-  source_dir  = "${path.module}/../../${each.value.source_directory}"
+  source_dir  = "${path.module}/../${each.value.source_directory}"
   excludes    = ["__pycache__", "*.pyc", "test"]
   type        = "zip"
 }
