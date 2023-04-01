@@ -1,11 +1,11 @@
 # WIP :warning:
 
-# :gem: DiscordGems :gem:
-A simple serverless discord bot written in python3.8 that can be used to appreciate your squad members by giving them :gem:s. The given :gem:s are stored and can be ranked to see who's had the most appreciation or who appreciated the most.
+# 💎 DiscordGems 💎
+A simple serverless discord bot written in python3.8 that can be used to appreciate your squad members by giving them 💎s. The given 💎s are stored and can be ranked to see who's had the most appreciation or who appreciated the most.
 
 *This is our implementation. We've tried to write the code in an extensible way. We will keep working on it as we see fit. We encourage the community to raise pull requests and help us fix issues.*
 
-## Getting Started :smile:
+## Getting Started 😄
 We've tried to make it as extensible as we can. Hence why there are so many parameters to set.
 
 ### Tool Set
@@ -14,6 +14,8 @@ We've tried to make it as extensible as we can. Hence why there are so many para
 - Docker
 - Terraform
 
+### How to create a discord application with bot
+[Create Discord Application](docs/CreateBot.md)
 ### Required Env Variables
 | Variable Name | Description | Default Value |
 | ------------- | ------------- | ------------- |
@@ -31,13 +33,13 @@ We've tried to make it as extensible as we can. Hence why there are so many para
 | `TF_VARS` | An amalgamation of all required terraform variables as mentioned [here](#Passing-Terraform-Variables-as-Environment) | None |
 
 ### Terraform Specific Variables
-| Variable Name | Description | Default Value |
-| ------------- | ------------- | ------------- |
-| `prefix` | Resource names to prefix with | None |
-| `discord_public_key_secrets_arn` | A secrets manager arn for discord public key | None |
-| `max_gems_per_day` | Maximum gems one can give | None |
-| `discord_gems_channel` | Discord channel to use the gem command in | None |
-| `discord_bot_token_secret_arn` | A secrets manager arn for discord bot | None |
+| Variable Name | Description                                                                                                                         | Default Value |
+| ------------- |-------------------------------------------------------------------------------------------------------------------------------------| ------------- |
+| `prefix` | Resource names to prefix with                                                                                                       | None |
+| `discord_public_key_secrets_arn` | A secrets manager arn for discord public key                                                                                        | None |
+| `max_gems_per_day` | Maximum gems one can give                                                                                                           | None |
+| `discord_gems_channel` | Discord channel to use the gem command in. Do not pass this value or set empty string ("") if you want to give gem from any channel | "" |
+| `discord_bot_token_secret_arn` | A secrets manager arn for discord bot                                                                                               | None |
 
 ### Passing Terraform Variables as Environment
 If you are running the terraform code in our provided container you must pass terraform variables as TF_VARS.
