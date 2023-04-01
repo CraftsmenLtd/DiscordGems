@@ -44,4 +44,4 @@ def get_cached_secret(secrets_arn: str) -> str:
         f'http://localhost:2773/secretsmanager/get?secretId={param_path}', headers=headers)
     response.raise_for_status()
 
-    return response.json()["Parameter"]["Value"]
+    return response.json()["SecretString"]
