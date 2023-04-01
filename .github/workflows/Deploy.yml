@@ -51,4 +51,4 @@ jobs:
       run: make run-command-in-container-deploy
 
     - name: Register Bot
-      run: INTERACTIONS_ENDPOINT_URL=$(shell terraform output interactions_endpoint_url) make run-command-in-container-register-bot
+      run: make run-command-in-container-register-bot
