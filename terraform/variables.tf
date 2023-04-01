@@ -17,6 +17,7 @@ variable "max_gems_per_day" {
 variable "discord_gems_channel" {
   type        = string
   description = "Allowed discord channel to provide gem"
+  default = ""
 }
 
 variable "discord_bot_token_secret_arn" {
