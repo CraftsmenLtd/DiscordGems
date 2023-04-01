@@ -32,3 +32,15 @@ variable "discord_bot_token_secret_arn" {
   description = "Discord bot token arn of ssm"
   sensitive   = true
 }
+
+variable "secrets_manager_cache_lambda_layer_account_id" {
+  type        = string
+  description = "The secrets manager caching layer arn for your region. Default set to ap-south-1. More https://docs.aws.amazon.com/systems-manager/latest/userguide/ps-integration-lambda-extensions.html#ps-integration-lambda-extensions-add"
+  default     = "176022468876"
+}
+
+variable "secrets_manager_cache_lambda_layer_version" {
+  type        = number
+  description = "The secrets manager caching layer version for your region. Default set to 4. More https://docs.aws.amazon.com/systems-manager/latest/userguide/ps-integration-lambda-extensions.html#ps-integration-lambda-extensions-add"
+  default     = 4
+}

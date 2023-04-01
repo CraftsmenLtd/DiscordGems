@@ -37,7 +37,7 @@ resource "aws_lambda_function" "lambda_functions" {
   runtime          = local.lambda_python_version
   timeout          = lookup(each.value, "timeout", 120)
   memory_size      = lookup(each.value, "memory_size", 128)
-  layers           = [aws_lambda_layer_version.lambda_layer.arn]
+  layers           = [aws_lambda_layer_version.lambda_layer.arn, "arn:aws:lambda:${data.aws_region.current.name}:${var.secrets_manager_cache_lambda_layer_account_id}:layer:AWS-Parameters-and-Secrets-Lambda-Extension:${var.secrets_manager_cache_lambda_layer_version}"]
   publish          = true
   environment {
     variables = lookup(each.value, "env_variables", {})

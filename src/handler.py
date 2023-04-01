@@ -12,7 +12,7 @@ from communication import send_channel_message
 from constants import load_environment_variables
 from dynamo import (get_monthly_rank, insert_gem_to_dynamo,
                     sender_gem_count_today)
-from secrets_manager_helper import get_secret
+from secrets_manager_helper import get_cached_secret
 
 PING_PONG = {"type": 1}
 
@@ -34,7 +34,7 @@ def handler(event, _):
     # verify the signature
     try:
         # TODO: add discord public key in lambda cache
-        verify_signature(event, get_secret(
+        verify_signature(event, get_cached_secret(
             env_vars.discord_public_key_secrets_arn))
     except Exception as e:
         raise Exception(f"[UNAUTHORIZED] Invalid request signature: {e}")
@@ -111,7 +111,7 @@ def gem_handler(body: Dict[str, Any], env_vars):
 
 
 def _handle_trigger_from_cron(env_vars):
-    discord_bot_token: str = get_secret(
+    discord_bot_token: str = get_cached_secret(
         env_vars.discord_bot_token_secret_arn
     )
 
@@ -138,7 +138,7 @@ def handle_rank_command():
         today.month, today.year
     )
     message: str = _rank_message(
-        rank, "**:heart_hands: Top 5 most appreciated :gem: this month :heart_hands:**")
+        rank, "**:heart_hands: Top 5 most appreciated :gem:s this month :heart_hands:**")
     return slash_command_response(message)
 
 
