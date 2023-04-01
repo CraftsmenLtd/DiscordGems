@@ -34,7 +34,8 @@ def handler(event, _):
     # verify the signature
     try:
         # TODO: add discord public key in lambda cache
-        verify_signature(event, get_secret(env_vars.discord_public_key_secrets_arn))
+        verify_signature(event, get_secret(
+            env_vars.discord_public_key_secrets_arn))
     except Exception as e:
         raise Exception(f"[UNAUTHORIZED] Invalid request signature: {e}")
 
@@ -136,15 +137,16 @@ def handle_rank_command():
     rank: Dict[str, int] = get_monthly_rank(
         today.month, today.year
     )
-    message: str = _rank_message(rank, "Top members of this month")
+    message: str = _rank_message(
+        rank, "__Top 5 most appreciated members this month__")
     return slash_command_response(message)
 
 
 def _rank_message(rank: Dict[str, int], headline: str, max_count: int = 5) -> str:
     if not rank:
-        message: str = "No 💎 found to make rank 😢"
+        message: str = "No 💎s found to rank 😢"
     else:
-        message: str = f"{headline}\n--------------"
+        message: str = f"{headline}"
         top_rank_count: int = 0
         for discord_id, gems in rank.items():
             message += f"\n<@{discord_id}>: {gems}"
