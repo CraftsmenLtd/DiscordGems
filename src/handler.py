@@ -71,7 +71,7 @@ def gem_handler(body: Dict[str, Any], env_vars):
     """Handle gems and respond to user"""
     if body.get("channel_id") != env_vars.discord_gems_channel:
         return slash_command_response(
-            f"Use channel <#{env_vars.discord_gems_channel}> to give 💎"
+            f"**:currency_exchange: Use channel <#{env_vars.discord_gems_channel}> to give 💎s :currency_exchange:**"
         )
 
     try:
@@ -82,13 +82,13 @@ def gem_handler(body: Dict[str, Any], env_vars):
         LOGGER.info(f"Gem message: {gems_message}")
 
         if gems_message.sender_discord_id == gems_message.receiver_discord_id:
-            return slash_command_response("You can not give 💎 to yourself")
+            return slash_command_response("**:x: You can not give 💎s to yourself :x:**")
 
         if gems_message.is_invalid_receiver:
-            return slash_command_response("Invalid 💎 receiver")
+            return slash_command_response("**:x: Invalid 💎s receiver :x:**")
 
         if not gems_message.gem_count:
-            return slash_command_response("No 💎 found in message")
+            return slash_command_response("**:x: No 💎s found in message :x:**")
 
         max_gem: int = int(env_vars.max_gems_per_day)
         gems_today: int = sender_gem_count_today(
@@ -96,18 +96,18 @@ def gem_handler(body: Dict[str, Any], env_vars):
         if gems_today + gems_message.gem_count <= max_gem:
             insert_gem_to_dynamo(gems_message)
             return slash_command_response(
-                f"{gems_message.sender_username} to "
+                f"**:heart_eyes: {gems_message.sender_username} to **"
                 f"<@{gems_message.receiver_discord_id}>: "
                 f"{gems_message.gem_message}"
             )
         else:
             return slash_command_response(
-                f"You have {max_gem - gems_today} 💎 left for today"
+                f"**:1234: You have {max_gem - gems_today} 💎 left for today :1234:**"
             )
     except Exception as error:
         LOGGER.error(f"Command failed with {error}")
 
-    return slash_command_response("Message parsing failed. Please contact with admin.")
+    return slash_command_response("**:man_shrugging: Message parsing failed. Please contact with admin :man_shrugging:**")
 
 
 def _handle_trigger_from_cron(env_vars):
