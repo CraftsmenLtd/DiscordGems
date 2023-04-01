@@ -11,6 +11,7 @@ INTERACTIONS_ENDPOINT_URL = os.environ["INTERACTIONS_ENDPOINT_URL"]
 
 LOGGER = logging.getLogger(__name__)
 LOGGER.setLevel(logging.INFO)
+LOGGER.addHandler(logging.StreamHandler())
 
 if __name__ == "__main__":
     app_registration = DiscordAppRegistration(APP_ID, BOT_TOKEN)
