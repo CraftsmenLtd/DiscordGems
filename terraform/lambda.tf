@@ -52,6 +52,9 @@ resource "aws_lambda_provisioned_concurrency_config" "max_concurrency" {
   function_name                     = aws_lambda_function.lambda_functions[local.lambda_options.discord-gems.name].function_name
   provisioned_concurrent_executions = var.lambda_max_concurrency
   qualifier                         = aws_lambda_function.lambda_functions[local.lambda_options.discord-gems.name].version
+  depends_on = [
+    aws_lambda_function.lambda_functions
+  ]
 }
 
 resource "aws_lambda_function_url" "discord_gems_url" {
