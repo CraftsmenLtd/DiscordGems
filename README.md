@@ -60,3 +60,7 @@ Deploy terraform code
 ```
 make run-command-in-container-deploy
 ```
+Register the Bot with Discord
+```shell
+make run-command-in-container-register-bot
+```
