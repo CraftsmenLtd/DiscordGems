@@ -28,6 +28,7 @@ We've tried to make it as extensible as we can. Hence why there are so many para
 | `TF_BACKEND_BUCKET_KEY` | Key name to store terraform state as | None |
 | `TF_BACKEND_BUCKET_NAME` | Bucket name to store terraform state in | None |
 | `TF_BACKEND_BUCKET_REGION` | Region of the terraform state bucket | None |
+| `TF_VARS` | An amalgamation of all required terraform variables as mentioned [here](#Passing-Terraform-Variables-as-Environment) | None |
 
 ### Terraform Specific Variables
 | Variable Name | Description | Default Value |
