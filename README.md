@@ -37,7 +37,8 @@ We've tried to make it as extensible as we can. Hence why there are so many para
 | ------------- | ------------- | ------------- |
 | `prefix` | Resource names to prefix with | None |
 | `discord_public_key_secrets_arn` | A secrets manager arn for discord public key | None |
-| `max_gems_per_day` | Maximum gems one can give | None |
+| `max_gems_per_day` | Maximum gems one can give per day | 5 |
+| `lambda_max_concurrency` | Maximum number of lambdas that can run at a given time | 5 |
 | `discord_gems_channel` | Discord channel to use the gem command in | None |
 | `discord_bot_token_secret_arn` | A secrets manager arn for discord bot | None |
 
