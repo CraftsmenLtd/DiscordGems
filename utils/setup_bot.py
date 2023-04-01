@@ -10,8 +10,6 @@ BOT_TOKEN = os.environ["BOT_TOKEN"]
 INTERACTIONS_ENDPOINT_URL = os.environ["INTERACTIONS_ENDPOINT_URL"]
 
 LOGGER = logging.getLogger()
-LOGGER.setLevel(logging.INFO)
-
 
 if __name__ == "__main__":
     app_registration = DiscordAppRegistration(APP_ID, BOT_TOKEN)
