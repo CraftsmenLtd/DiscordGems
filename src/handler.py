@@ -122,7 +122,7 @@ def _handle_trigger_from_cron(env_vars):
     rank: Dict[str, int] = get_monthly_rank(month, last_month_last_day.year)
 
     message: str = _rank_message(
-        rank, f"Top members of {calendar.month_name[month]}")
+        rank, f"**:calendar: Top members of {calendar.month_name[month]} :calendar:**")
 
     send_channel_message(
         discord_bot_token,
@@ -138,7 +138,7 @@ def handle_rank_command():
         today.month, today.year
     )
     message: str = _rank_message(
-        rank, "__Top 5 most appreciated members this month__")
+        rank, "**:heart_hands: Top 5 most appreciated :gem: this month :heart_hands:**")
     return slash_command_response(message)
 
 
