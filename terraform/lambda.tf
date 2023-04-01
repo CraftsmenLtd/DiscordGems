@@ -38,7 +38,7 @@ resource "aws_lambda_function" "lambda_functions" {
   timeout          = lookup(each.value, "timeout", 120)
   memory_size      = lookup(each.value, "memory_size", 128)
   layers           = [aws_lambda_layer_version.lambda_layer.arn]
-
+  publish          = true
   environment {
     variables = lookup(each.value, "env_variables", {})
   }
