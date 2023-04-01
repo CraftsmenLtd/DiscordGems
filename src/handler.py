@@ -102,7 +102,7 @@ def gem_handler(body: Dict[str, Any], env_vars):
             )
         else:
             return slash_command_response(
-                f"**:1234: You have {max_gem - gems_today} 💎 left for today :1234:**"
+                f"**:1234: You have {max_gem - gems_today} 💎(s) left for today :1234:**"
             )
     except Exception as error:
         LOGGER.error(f"Command failed with {error}")
