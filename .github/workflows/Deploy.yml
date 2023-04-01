@@ -46,9 +46,9 @@ jobs:
 
     - name: Run Terraform Validation
       run: make run-command-in-container-validate-terraform
-    
-    - name: Register Bot
-      run: make run-command-in-container-register-bot
 
     - name: Deploy
       run: make run-command-in-container-deploy
+
+    - name: Register Bot
+      run: INTERACTIONS_ENDPOINT_URL=$(shell terraform output interactions_endpoint_url) make run-command-in-container-register-bot
