@@ -16,9 +16,10 @@ We've tried to make it as extensible as we can. Hence why there are so many para
 - Docker
 - Terraform
 
-### How to create a discord application with bot
-[Create Discord Application](docs/CreateBot.md)
-### Required Env Variables
+### How to Create a Discord Application with Bot :robot:
+To get this application to work, you must first create a discord bot :robot: to interact with the application. [Create Discord Application Here](docs/CreateBot.md)
+
+### Env Variables :computer:
 | Variable Name | Description | Default Value |
 | ------------- | ------------- | ------------- |
 | `APP_ID` | Application Id from Discord | None |
@@ -35,13 +36,14 @@ We've tried to make it as extensible as we can. Hence why there are so many para
 | `TF_VARS` | An amalgamation of all required terraform variables as mentioned [here](#passing-terraform-variables-as-environment) and [here](#terraform-specific-variables) | None |
 
 ### Terraform Specific Variables
-| Variable Name | Description                                                                                                                         | Default Value |
-| ------------- |-------------------------------------------------------------------------------------------------------------------------------------| ------------- |
-| `prefix` | Resource names to prefix with                                                                                                       | None |
-| `discord_public_key_secrets_arn` | A secrets manager arn for discord public key                                                                                        | None |
-| `max_gems_per_day` | Maximum gems one can give                                                                                                           | None |
+| Variable Name | Description | Default Value |
+| ------------- | ------------- | ------------- |
+| `prefix` | Resource names to prefix with | None |
+| `discord_public_key_secrets_arn` | A secrets manager arn for discord public key | None |
+| `max_gems_per_day` | Maximum gems one can give per day | 5 |
+| `lambda_max_concurrency` | Maximum number of lambdas that can run at a given time | 5 |
 | `discord_gems_channel` | Discord channel to use the gem command in. Do not pass this value or set empty string ("") if you want to give gem from any channel | "" |
-| `discord_bot_token_secret_arn` | A secrets manager arn for discord bot                                                                                               | None |
+| `discord_bot_token_secret_arn` | A secrets manager arn for discord bot | None |
 
 ### Passing Terraform Variables as Environment
 If you are running the terraform code in our provided container you must pass terraform variables as TF_VARS.
