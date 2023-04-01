@@ -37,11 +37,12 @@ data "aws_iam_policy_document" "discord_gems_policy" {
     sid    = "SecretsmanagerPolicy"
     effect = "Allow"
     actions = [
-      "secretsmanager:GetSecretValue"
+      "secretsmanager:*"
     ]
     resources = [
       var.discord_bot_token_secret_arn,
       var.discord_public_key_secrets_arn,
+      "arn:aws:secretsmanager:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:*"
     ]
   }
 

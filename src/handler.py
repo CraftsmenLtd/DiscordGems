@@ -12,7 +12,7 @@ from communication import send_channel_message
 from constants import load_environment_variables
 from dynamo import (get_monthly_rank, insert_gem_to_dynamo,
                     sender_gem_count_today)
-from secrets_manager_helper import get_secret
+from secrets_manager_helper import get_cached_secret
 
 PING_PONG = {"type": 1}
 
@@ -34,7 +34,8 @@ def handler(event, _):
     # verify the signature
     try:
         # TODO: add discord public key in lambda cache
-        verify_signature(event, get_secret(env_vars.discord_public_key_secrets_arn))
+        verify_signature(event, get_cached_secret(
+            env_vars.discord_public_key_secrets_arn))
     except Exception as e:
         raise Exception(f"[UNAUTHORIZED] Invalid request signature: {e}")
 
@@ -71,7 +72,7 @@ def gem_handler(body: Dict[str, Any], env_vars):
     gems_channel: Optional[str] = env_vars.discord_gems_channel
     if gems_channel and body.get("channel_id") != gems_channel:
         return slash_command_response(
-            f"Use channel <#{env_vars.discord_gems_channel}> to give 💎"
+            f"**:currency_exchange: Use channel <#{env_vars.discord_gems_channel}> to give 💎s :currency_exchange:**"
         )
 
     try:
@@ -82,13 +83,13 @@ def gem_handler(body: Dict[str, Any], env_vars):
         LOGGER.info(f"Gem message: {gems_message}")
 
         if gems_message.sender_discord_id == gems_message.receiver_discord_id:
-            return slash_command_response("You can not give 💎 to yourself")
+            return slash_command_response("**:x: You can not give 💎s to yourself :x:**")
 
         if gems_message.is_invalid_receiver:
-            return slash_command_response("Invalid 💎 receiver")
+            return slash_command_response("**:x: Invalid 💎s receiver :x:**")
 
         if not gems_message.gem_count:
-            return slash_command_response("No 💎 found in message")
+            return slash_command_response("**:x: No 💎s found in message :x:**")
 
         max_gem: int = int(env_vars.max_gems_per_day)
         gems_today: int = sender_gem_count_today(
@@ -96,22 +97,22 @@ def gem_handler(body: Dict[str, Any], env_vars):
         if gems_today + gems_message.gem_count <= max_gem:
             insert_gem_to_dynamo(gems_message)
             return slash_command_response(
-                f"{gems_message.sender_username} to "
+                f"**:heart_eyes: {gems_message.sender_username} to **"
                 f"<@{gems_message.receiver_discord_id}>: "
                 f"{gems_message.gem_message}"
             )
         else:
             return slash_command_response(
-                f"You have {max_gem - gems_today} 💎 left for today"
+                f"**:1234: You have {max_gem - gems_today} 💎(s) left for today :1234:**"
             )
     except Exception as error:
         LOGGER.error(f"Command failed with {error}")
 
-    return slash_command_response("Message parsing failed. Please contact with admin.")
+    return slash_command_response("**:man_shrugging: Message parsing failed. Please contact with admin :man_shrugging:**")
 
 
 def _handle_trigger_from_cron(env_vars):
-    discord_bot_token: str = get_secret(
+    discord_bot_token: str = get_cached_secret(
         env_vars.discord_bot_token_secret_arn
     )
 
@@ -122,7 +123,7 @@ def _handle_trigger_from_cron(env_vars):
     rank: Dict[str, int] = get_monthly_rank(month, last_month_last_day.year)
 
     message: str = _rank_message(
-        rank, f"Top members of {calendar.month_name[month]}")
+        rank, f"**:calendar: Top members of {calendar.month_name[month]} :calendar:**")
 
     send_channel_message(
         discord_bot_token,
@@ -137,15 +138,16 @@ def handle_rank_command():
     rank: Dict[str, int] = get_monthly_rank(
         today.month, today.year
     )
-    message: str = _rank_message(rank, "Top members of this month")
+    message: str = _rank_message(
+        rank, "**:heart_hands: Top 5 most appreciated :gem:s this month :heart_hands:**")
     return slash_command_response(message)
 
 
 def _rank_message(rank: Dict[str, int], headline: str, max_count: int = 5) -> str:
     if not rank:
-        message: str = "No 💎 found to make rank 😢"
+        message: str = "No 💎s found to rank 😢"
     else:
-        message: str = f"{headline}\n--------------"
+        message: str = f"{headline}"
         top_rank_count: int = 0
         for discord_id, gems in rank.items():
             message += f"\n<@{discord_id}>: {gems}"

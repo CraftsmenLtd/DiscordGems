@@ -37,8 +37,8 @@ resource "aws_lambda_function" "lambda_functions" {
   runtime          = local.lambda_python_version
   timeout          = lookup(each.value, "timeout", 120)
   memory_size      = lookup(each.value, "memory_size", 128)
-  layers           = [aws_lambda_layer_version.lambda_layer.arn]
-
+  layers           = [aws_lambda_layer_version.lambda_layer.arn, "arn:aws:lambda:${data.aws_region.current.name}:${var.secrets_manager_cache_lambda_layer_account_id}:layer:AWS-Parameters-and-Secrets-Lambda-Extension:${var.secrets_manager_cache_lambda_layer_version}"]
+  publish          = true
   environment {
     variables = lookup(each.value, "env_variables", {})
   }
@@ -46,6 +46,15 @@ resource "aws_lambda_function" "lambda_functions" {
   lifecycle {
     create_before_destroy = true
   }
+}
+
+resource "aws_lambda_provisioned_concurrency_config" "max_concurrency" {
+  function_name                     = aws_lambda_function.lambda_functions[local.lambda_options.discord-gems.name].function_name
+  provisioned_concurrent_executions = var.lambda_max_concurrency
+  qualifier                         = aws_lambda_function.lambda_functions[local.lambda_options.discord-gems.name].version
+  depends_on = [
+    aws_lambda_function.lambda_functions
+  ]
 }
 
 resource "aws_lambda_function_url" "discord_gems_url" {
