@@ -6,6 +6,7 @@ variable "prefix" {
 variable "discord_public_key_secrets_arn" {
   type        = string
   description = "Discord bot public key in general information page"
+  sensitive   = true
 }
 
 variable "max_gems_per_day" {
@@ -14,9 +15,16 @@ variable "max_gems_per_day" {
   default     = 5
 }
 
+variable "lambda_max_concurrency" {
+  type        = number
+  description = "Max number of lambda that can run at a given time"
+  default     = 5
+}
+
 variable "discord_gems_channel" {
   type        = string
   description = "Allowed discord channel to provide gem"
+  sensitive   = true
 }
 
 variable "discord_bot_token_secret_arn" {
