@@ -3,6 +3,7 @@ import requests
 
 
 class DiscordAppRegistration:
+    """Class to register the discord bot"""
     base_url: str = "https://discord.com/api"
 
     def __init__(self, app_id: str, bot_token: str):
