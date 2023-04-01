@@ -28,7 +28,7 @@ destroy:
 .PHONY: destroy
 
 register-bot:
-	cd utils && python setup_bot.py
+	cd utils && INTERACTIONS_ENDPOINT_URL=$(INTERACTIONS_ENDPOINT_URL) python setup_bot.py
 
 build-runner-image:
 	docker build -t $(RUNNER_IMAGE_NAME) $(DOCKER_BUILD_EXTRA_ARGS) .
