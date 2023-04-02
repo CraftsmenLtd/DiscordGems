@@ -15,25 +15,32 @@ class GemsMessage:
 
     @classmethod
     def from_slash_command(cls, body: Dict[str, Any]):
+        sender: Dict[str, Any] = body["member"]["user"]
+        gems_message = cls(
+            sender_discord_id=sender["id"],
+            sender_username=sender["username"],
+            receiver_discord_id="",
+        )
+
         options: List[Dict[str, Any]] = body["data"]["options"][0]["options"]
         for option in options:
             option_name: Optional[str] = option.get("name")
             if option_name == "user":
-                cls.receiver_discord_id = option["value"]
+                gems_message.receiver_discord_id = option["value"]
             elif option_name == "gems":
-                cls.gem_message = option["value"]
-                cls.gem_count = cls.gem_message.count("💎")
+                gems_message.gem_message = option["value"]
+                gems_message.gem_count = cls.gem_message.count("💎")
 
         receiver_resolved: Dict[str, Any] = body["data"]["resolved"]
         is_role: bool = bool(receiver_resolved.get("roles", False))
         is_bot: bool = receiver_resolved.get("users", {}).get(
-            cls.receiver_discord_id, {}).get("bot", False)
-        cls.is_invalid_receiver = is_bot or is_role
-        if not cls.is_invalid_receiver:
-            cls.receiver_username = receiver_resolved["users"][cls.receiver_discord_id]["username"]
-        cls.sender_username = body["member"]["user"]["username"]
-        cls.sender_discord_id = body["member"]["user"]["id"]
-        return cls
+            gems_message.receiver_discord_id, {}).get("bot", False)
+
+        gems_message.is_invalid_receiver = is_bot or is_role
+        if not gems_message.is_invalid_receiver:
+            cls.receiver_username = receiver_resolved["users"][gems_message.receiver_discord_id]["username"]
+
+        return gems_message
 
     def __repr__(self):
         return f"Sender username: {self.sender_username}\n" \
