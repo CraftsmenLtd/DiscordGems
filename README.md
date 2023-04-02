@@ -1,6 +1,4 @@
 # 💎 DiscordGems 💎
-A simple serverless discord bot written in python3.8 that can be used to appreciate your squad members by giving them 💎s. The given 💎s are stored and can be ranked to see who's had the most appreciation or who appreciated the most.
-# 💎 DiscordGems 💎
 A simple serverless discord bot written in python3.8 that can be used to appreciate your squad members by giving them 💎s. The given 💎s are stored and can be ranked to see who's had the most appreciation or who appreciated the most. We've created this tool here at [Craftsmen](https://craftsmenltd.com) to appreciate our colleagues for things that they do to make our lives easier.
 
 ## Our commands
@@ -48,14 +46,6 @@ To get this application to work, you must first create a discord bot 🤖 to int
 | `lambda_max_concurrency` | Maximum number of lambdas that can run at a given time | 5 |
 | `discord_gems_channel` | Discord channel to use the gem command in. Do not pass this value or set empty string ("") if you want to give gem from any channel | "" |
 | `discord_bot_token_secret_arn` | A secrets manager arn for discord bot | None |
-| Variable Name | Description                                                                                                                                                   | Default Value |
-| ------------- |---------------------------------------------------------------------------------------------------------------------------------------------------------------| ------------- |
-| `prefix` | Resource names to prefix with                                                                                                                                 | None |
-| `discord_public_key_secrets_arn` | A secrets manager arn for discord public key                                                                                                                  | None |
-| `max_gems_per_day` | Maximum gems one can give per day                                                                                                                             | 5 |
-| `lambda_max_concurrency` | Maximum number of lambdas that can run at a given time                                                                                                        | 5 |
-| `discord_gems_channel` | Discord channel to use the gem command in. Do not pass this value or set empty string ("") if you want to give gem from any channel                           | "" |
-| `discord_bot_token_secret_arn` | A secrets manager arn for discord bot                                                                                                                         | None |
 | `secrets_manager_cache_lambda_layer_account_id` | Secretsmanager cache lambda layer account id. Check here for more: https://docs.aws.amazon.com/secretsmanager/latest/userguide/retrieving-secrets_lambda.html | None |
 | `secrets_manager_cache_lambda_layer_version` | Secretsmanager cache lambda layer version. Check here for more: https://docs.aws.amazon.com/secretsmanager/latest/userguide/retrieving-secrets_lambda.html | None |
 
