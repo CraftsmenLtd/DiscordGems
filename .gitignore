@@ -7,3 +7,5 @@ lambda_zip
 layer_zip
 .terraform*
 .pytest_cache
+terraform.tfstate*
+*.zip
