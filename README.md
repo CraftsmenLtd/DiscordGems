@@ -3,7 +3,7 @@ A simple serverless discord bot written in python3.8 that can be used to appreci
 
 # Architecture
 The architectural diagram of this application.
-![Architecture](docs/resources/Architecture/architecture.png)
+![Architecture](docs/resources/Architecture/Architecture.png)
 
 ## Get Familiar With 💎
 https://emojipedia.org/gem-stone
