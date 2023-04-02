@@ -53,8 +53,8 @@ To get this application to work, you must first create a discord bot 🤖 to int
 | `lambda_max_concurrency` | Maximum number of lambdas that can run at a given time | 5 |
 | `discord_gems_channel` | Discord channel to use the gem command in. Do not pass this value or set empty string ("") if you want to give gem from any channel | "" |
 | `discord_bot_token_secret_arn` | A secrets manager arn for discord bot | None |
-| `secrets_manager_cache_lambda_layer_account_id` | Secretsmanager cache lambda layer account id. Check [here](https://docs.aws.amazon.com/secretsmanager/latest/userguide/retrieving-secrets_lambda.html) for more | None |
-| `secrets_manager_cache_lambda_layer_version` | Secretsmanager cache lambda layer version. Check [here](https://docs.aws.amazon.com/secretsmanager/latest/userguide/retrieving-secrets_lambda.html) for more | None |
+| `secrets_manager_cache_lambda_layer_account_id` | Secretsmanager cache lambda layer account id. Check [here](https://docs.aws.amazon.com/secretsmanager/latest/userguide/retrieving-secrets_lambda.html) for more | 176022468876 |
+| `secrets_manager_cache_lambda_layer_version` | Secretsmanager cache lambda layer version. Check [here](https://docs.aws.amazon.com/secretsmanager/latest/userguide/retrieving-secrets_lambda.html) for more | 4 |
 
 ### Passing Terraform Variables as Environment
 If you run the terraform code in our provided container you must pass terraform variables as TF_VARS.
