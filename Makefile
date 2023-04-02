@@ -1,9 +1,10 @@
 DOCKER_BUILD_EXTRA_ARGS?=--quiet
-DOCKER_ENV:=-e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY -e AWS_DEFAULT_REGION -e APP_ID -e GUILD_ID -e BOT_TOKEN -e COMMAND -e TF_BACKEND_BUCKET_NAME -e TF_BACKEND_BUCKET_KEY -e TF_BACKEND_BUCKET_REGION -e TF_VARS -e INTERACTIONS_ENDPOINT_URL
+DOCKER_ENV:=-e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY -e AWS_DEFAULT_REGION -e APP_ID -e GUILD_ID -e COMMAND -e TF_BACKEND_BUCKET_NAME -e TF_BACKEND_BUCKET_KEY -e TF_BACKEND_BUCKET_REGION -e TF_VARS -e INTERACTIONS_ENDPOINT_URL -e DISCORD_BOT_TOKEN
 DOCKER_RUN_MOUNT_OPTIONS:=-v ${CURDIR}:/app -w /app
 RUNNER_IMAGE_NAME?=runner-image
 TF_BACKEND_CONFIG=--backend-config="bucket=$(TF_BACKEND_BUCKET_NAME)" --backend-config="key=$(TF_BACKEND_BUCKET_KEY)" --backend-config="region=$(TF_BACKEND_BUCKET_REGION)"
 INTERACTIONS_ENDPOINT_URL?=$(shell terraform -chdir=terraform output interactions_endpoint_url)
+DISCORD_BOT_TOKEN?=$(shell terraform -chdir=terraform output discord_bot_token)
 MAKEFLAGS+= --no-print-directory
 
 install-dependencies:
@@ -28,7 +29,7 @@ destroy:
 .PHONY: destroy
 
 register-bot:
-	cd utils && INTERACTIONS_ENDPOINT_URL=$(INTERACTIONS_ENDPOINT_URL) python setup_bot.py
+	cd utils && INTERACTIONS_ENDPOINT_URL=$(INTERACTIONS_ENDPOINT_URL) DISCORD_BOT_TOKEN=$(DISCORD_BOT_TOKEN) python setup_bot.py
 
 build-runner-image:
 	docker build -t $(RUNNER_IMAGE_NAME) $(DOCKER_BUILD_EXTRA_ARGS) .
