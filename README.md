@@ -32,7 +32,6 @@ To get this application to work, you must first create a discord bot 🤖 to int
 | `AWS_ACCESS_KEY_ID` | Access Key Id from aws | None |
 | `AWS_DEFAULT_REGION` | Default region to deploy resources in | None |
 | `AWS_SECRET_ACCESS_KEY` | Secret Access Key from aws | None |
-| `BOT_TOKEN` | Bot Token from Discord | None |
 | `COMMAND` | Command in discord to register | None |
 | `GUILD_ID` | Guild/Server Id from Discord | None |
 | `RUNNER_IMAGE_NAME` | Runner image name | runner-image |
