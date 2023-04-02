@@ -1,9 +1,13 @@
 # 💎 DiscordGems 💎
 A simple serverless discord bot written in python3.8 that can be used to appreciate your squad members by giving them 💎s. The given 💎s are stored and can be ranked to see who's had the most appreciation or who appreciated the most. We've created this tool here at [Craftsmen](https://craftsmenltd.com) to appreciate our colleagues for things that they do to make our lives easier.
 
+# Architecture
+The architectural diagram of this application.
+<iframe frameborder="0" style="width:100%;height:246px;" src="https://viewer.diagrams.net/?tags=%7B%7D&highlight=0000ff&edit=_blank&layers=1&nav=1&title=discord-gems.drawio#Uhttps%3A%2F%2Fdrive.google.com%2Fuc%3Fid%3D1xFJUnVHxUBMwYuZN9qT6vXJiFhXbUoX0%26export%3Ddownload"></iframe>
+
 ## Get Familiar With 💎
 https://emojipedia.org/gem-stone/    
-For discord the shortcode is :gem:
+For discord the short code is :gem:
 
 ## Our commands
 - `/gem appreciate <a_user> <a message containing 💎 emojis>`: Must include :gem: emoji. You can have up to <max_gems_per_day> :gem: emojis in the message
