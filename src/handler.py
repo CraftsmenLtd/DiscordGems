@@ -33,7 +33,6 @@ def handler(event, _):
 
     # verify the signature
     try:
-        # TODO: add discord public key in lambda cache
         verify_signature(event, get_cached_secret(
             env_vars.discord_public_key_secrets_arn))
     except Exception as e:
