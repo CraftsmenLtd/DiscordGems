@@ -1,26 +1,27 @@
 locals {
   lambda_python_version = "python3.8"
-  lambda_artifact_dir   = "${path.module}/layer_zip"
-  lambda_layer_filepath = data.external.build_lambda_layer.result.zipfile_path
+  requirements_filepath = "${path.module}/../requirements.txt"
+  lambda_layer_zipfile_name = "craftsmen-bot-layer"
+
+  # WARNING: Do not change it
+  lambda_layer_dir   = "${path.module}/python"
 }
 
-data "external" "build_lambda_layer" {
-  program = ["/bin/bash", "-c", "${path.module}/build_layer.sh"]
+resource "null_resource" "build_lambda_layer" {
+  provisioner "local-exec" {
+    when    = create
+    command = "pip install -r ${local.requirements_filepath} --target ${local.lambda_layer_dir} && zip -r ${local.lambda_layer_zipfile_name}.zip ./${local.lambda_layer_dir} && rm -R ${local.lambda_layer_dir}"
+  }
 
-  query = {
-    DESTINATION_DIR = abspath(local.lambda_artifact_dir)
-    MODULE_DIR      = abspath(path.module)
-    ZIPFILE_NAME    = "craftsmen-bot-layer"
+  triggers = {
+    run_when = filemd5(local.requirements_filepath)
   }
 }
 
 resource "aws_lambda_layer_version" "lambda_layer" {
-  filename            = local.lambda_layer_filepath
-  source_code_hash    = filebase64sha256(local.lambda_layer_filepath)
-  layer_name          = "craftsmen-bot-layer"
+  filename            = "${local.lambda_layer_zipfile_name}.zip"
+  layer_name          = "${var.prefix}-lambda-layer"
   compatible_runtimes = [local.lambda_python_version]
-
-  lifecycle {
-    create_before_destroy = true
-  }
+  depends_on          = [null_resource.build_lambda_layer]
+  description         = filemd5(local.requirements_filepath)
 }
