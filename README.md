@@ -3,10 +3,10 @@ A simple serverless discord bot written in python3.8 that can be used to appreci
 
 # Architecture
 The architectural diagram of this application.
-<iframe frameborder="0" style="width:100%;height:246px;" src="https://viewer.diagrams.net/?tags=%7B%7D&highlight=0000ff&edit=_blank&layers=1&nav=1&title=discord-gems.drawio#Uhttps%3A%2F%2Fdrive.google.com%2Fuc%3Fid%3D1xFJUnVHxUBMwYuZN9qT6vXJiFhXbUoX0%26export%3Ddownload"></iframe>
+![Bot Menu](docs/resources/architecture/architecture.png)
 
 ## Get Familiar With 💎
-https://emojipedia.org/gem-stone/    
+https://emojipedia.org/gem-stone
 For discord the short code is :gem:
 
 ## Our commands
