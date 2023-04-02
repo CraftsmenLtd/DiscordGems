@@ -2,7 +2,7 @@
 A simple serverless discord bot written in python3.8 that can be used to appreciate your squad members by giving them 💎s. The given 💎s are stored and can be ranked to see who's had the most appreciation or who appreciated the most.
 
 ## Our commands
-- `/gem appreciate <a_user> <a message containing :gem: emojis>`: Must include :gem: emoji. You can have up to <max_gems_per_day> :gem: emojis in the message
+- `/gem appreciate <a_user> <a message containing 💎 emojis>`: Must include :gem: emoji. You can have up to <max_gems_per_day> :gem: emojis in the message
 - `/gem rank`: Ranks the 💎 leader board
 
 *This is our implementation. We've tried to write the code in an extensible way. We will keep working on it as we see fit. We encourage the community to raise pull requests and help us fix issues.*
@@ -16,7 +16,7 @@ We've tried to make it as extensible as we can. Hence why there are so many para
 - Docker
 - Terraform
 
-### How to create a discord application with bot
+### How to Create a Discord Application with Bot
 [Create Discord Application](docs/CreateBot.md)
 
 ### Required Env Variables
@@ -36,23 +36,25 @@ We've tried to make it as extensible as we can. Hence why there are so many para
 | `TF_VARS` | An amalgamation of all required terraform variables as mentioned [here](#passing-terraform-variables-as-environment) and [here](#terraform-specific-variables) | None |
 
 ### Terraform Specific Variables
-| Variable Name | Description | Default Value |
-| ------------- | ------------- | ------------- |
-| `prefix` | Resource names to prefix with | None |
-| `discord_public_key_secrets_arn` | A secrets manager arn for discord public key | None |
-| `max_gems_per_day` | Maximum gems one can give per day | 5 |
-| `lambda_max_concurrency` | Maximum number of lambdas that can run at a given time | 5 |
-| `discord_gems_channel` | Discord channel to use the gem command in. Do not pass this value or set empty string ("") if you want to give gem from any channel | "" |
-| `discord_bot_token_secret_arn` | A secrets manager arn for discord bot | None |
+| Variable Name | Description                                                                                                                                                   | Default Value |
+| ------------- |---------------------------------------------------------------------------------------------------------------------------------------------------------------| ------------- |
+| `prefix` | Resource names to prefix with                                                                                                                                 | None |
+| `discord_public_key_secrets_arn` | A secrets manager arn for discord public key                                                                                                                  | None |
+| `max_gems_per_day` | Maximum gems one can give per day                                                                                                                             | 5 |
+| `lambda_max_concurrency` | Maximum number of lambdas that can run at a given time                                                                                                        | 5 |
+| `discord_gems_channel` | Discord channel to use the gem command in. Do not pass this value or set empty string ("") if you want to give gem from any channel                           | "" |
+| `discord_bot_token_secret_arn` | A secrets manager arn for discord bot                                                                                                                         | None |
+| `secrets_manager_cache_lambda_layer_account_id` | Secretsmanager cache lambda layer account id. Check here for more: https://docs.aws.amazon.com/secretsmanager/latest/userguide/retrieving-secrets_lambda.html | None |
+| `secrets_manager_cache_lambda_layer_version` | Secretsmanager cache lambda layer version. Check here for more: https://docs.aws.amazon.com/secretsmanager/latest/userguide/retrieving-secrets_lambda.html | None |
 
 ### Passing Terraform Variables as Environment
-If you are running the terraform code in our provided container you must pass terraform variables as TF_VARS.
+If you run the terraform code in our provided container you must pass terraform variables as TF_VARS.
 Example:
 ```shell
 TF_VARS='-var="prefix=a_prefix" -var="max_gems_per_day=5"' make run-command-in-container-deploy
 ```
 
-## How to Deploy from Local Machine
+## How to Deploy from Local Machine 💻
 Run the following commands one by one. Make sure you have made sure all environment variables are set appropriately.
 
 Build a docker image to run the code in. The image contains all required dependencies the app needs.
