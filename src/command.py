@@ -29,7 +29,7 @@ class GemsMessage:
                 gems_message.receiver_discord_id = option["value"]
             elif option_name == "gems":
                 gems_message.gem_message = option["value"]
-                gems_message.gem_count = cls.gem_message.count("💎")
+                gems_message.gem_count = gems_message.gem_message.count("💎")
 
         receiver_resolved: Dict[str, Any] = body["data"]["resolved"]
         is_role: bool = bool(receiver_resolved.get("roles", False))
@@ -38,7 +38,8 @@ class GemsMessage:
 
         gems_message.is_invalid_receiver = is_bot or is_role
         if not gems_message.is_invalid_receiver:
-            cls.receiver_username = receiver_resolved["users"][gems_message.receiver_discord_id]["username"]
+            gems_message.receiver_username = receiver_resolved[
+                "users"][gems_message.receiver_discord_id]["username"]
 
         return gems_message
 
