@@ -3,7 +3,7 @@ import calendar
 import datetime
 import json
 import logging
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 from nacl.signing import VerifyKey
 
@@ -68,7 +68,8 @@ def verify_signature(event: Dict[str, Any], public_key: str):
 
 def gem_handler(body: Dict[str, Any], env_vars):
     """Handle gems and respond to user"""
-    if body.get("channel_id") != env_vars.discord_gems_channel:
+    gems_channel: Optional[str] = env_vars.discord_gems_channel
+    if gems_channel and body.get("channel_id") != gems_channel:
         return slash_command_response(
             f"**:currency_exchange: Use channel <#{env_vars.discord_gems_channel}> to give 💎s :currency_exchange:**"
         )
