@@ -35,6 +35,11 @@ class GemsMessage:
         cls.sender_discord_id = body["member"]["user"]["id"]
         return cls
 
+    def __repr__(self):
+        return f"Sender username: {self.sender_username}\n" \
+               f"Receiver username: {self.receiver_username}\n" \
+               f"Gem message: {self.gem_message}"
+
 
 def is_rank_command(body: Dict[str, Any]) -> bool:
     """Check if the command is for ranking"""
