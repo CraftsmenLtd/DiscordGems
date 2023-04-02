@@ -25,7 +25,7 @@ variable "discord_gems_channel" {
   type        = string
   description = "Allowed discord channel to provide gem"
   sensitive   = true
-  default = ""
+  default     = ""
 }
 
 variable "discord_bot_token_secret_arn" {
