@@ -28,8 +28,10 @@ destroy:
 	terraform -chdir=terraform destroy -input=false tfplan-destroy
 .PHONY: destroy
 
+.SILENT:
 register-bot:
 	cd utils && INTERACTIONS_ENDPOINT_URL=$(INTERACTIONS_ENDPOINT_URL) DISCORD_BOT_TOKEN=$(DISCORD_BOT_TOKEN) python setup_bot.py
+.PHONY: register-bot
 
 build-runner-image:
 	docker build -t $(RUNNER_IMAGE_NAME) $(DOCKER_BUILD_EXTRA_ARGS) .
