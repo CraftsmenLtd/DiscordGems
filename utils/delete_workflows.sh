@@ -1,6 +1,5 @@
-export OWNER="CraftsmenLtd"
-export REPOSITORY="DiscordGems"
-export WORKFLOW="Deploy Infrastructure"
+OWNER="CraftsmenLtd"
+REPOSITORY="DiscordGems"
 
 gh api repos/$OWNER/$REPOSITORY/actions/runs \
 --paginate -q '.workflow_runs[] | "\(.id)"' | \
