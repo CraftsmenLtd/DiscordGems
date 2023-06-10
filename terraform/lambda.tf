@@ -5,8 +5,8 @@ locals {
       source_directory = "src"
       policy           = data.aws_iam_policy_document.discord_gems_policy
       handler          = "handler.handler"
-      timeout          = 900
-      memory_size      = 1024
+      timeout          = 120
+      memory_size      = 128
       env_variables = {
         gems_table_name                = aws_dynamodb_table.gems_table.name
         discord_public_key_secrets_arn = var.discord_public_key_secrets_arn
@@ -48,16 +48,14 @@ resource "aws_lambda_function" "lambda_functions" {
   }
 }
 
-resource "aws_lambda_provisioned_concurrency_config" "max_concurrency" {
-  function_name                     = aws_lambda_function.lambda_functions[local.lambda_options.discord-gems.name].function_name
-  provisioned_concurrent_executions = var.lambda_max_concurrency
-  qualifier                         = aws_lambda_function.lambda_functions[local.lambda_options.discord-gems.name].version
-  depends_on = [
-    aws_lambda_function.lambda_functions
-  ]
-}
-
 resource "aws_lambda_function_url" "discord_gems_url" {
   function_name      = aws_lambda_function.lambda_functions[local.lambda_options.discord-gems.name].function_name
   authorization_type = "NONE"
+}
+
+resource "aws_lambda_function_event_invoke_config" "invoke_config" {
+  for_each                     = local.lambda_options
+  function_name                = aws_lambda_function.lambda_functions[each.value.name].function_name
+  maximum_event_age_in_seconds = 120
+  maximum_retry_attempts       = 2
 }
