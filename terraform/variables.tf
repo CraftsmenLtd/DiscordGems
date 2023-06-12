@@ -61,5 +61,5 @@ variable "lambda_maximum_event_age_in_seconds" {
 variable "billing_tag" {
   type        = string
   description = "AWS billing tag value"
-  default     = "DiscordGems"
+  default     = "billing"
 }

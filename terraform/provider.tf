@@ -11,7 +11,7 @@ terraform {
 provider "aws" {
   default_tags {
     tags = {
-      billing = var.billing_tag
+      DiscordGems = var.billing_tag
     }
   }
 }
