@@ -11,7 +11,7 @@ terraform {
 provider "aws" {
   default_tags {
     tags = {
-      billing = var.billing_tag_value
+      billing = var.billing_tag
     }
   }
 }
