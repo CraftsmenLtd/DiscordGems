@@ -1,12 +1,14 @@
 locals {
   lambda_options = {
     discord-gems = {
-      name             = "discord-gems"
-      source_directory = "src"
-      policy           = data.aws_iam_policy_document.discord_gems_policy
-      handler          = "handler.handler"
-      timeout          = 900
-      memory_size      = 1024
+      name                 = "discord-gems"
+      source_directory     = "src"
+      policy               = data.aws_iam_policy_document.discord_gems_policy
+      handler              = "handler.handler"
+      timeout              = 120
+      memory_size          = 128
+      publish_lambda       = true
+      reserved_concurrency = var.lambda_reserved_concurrency
       env_variables = {
         gems_table_name                = aws_dynamodb_table.gems_table.name
         discord_public_key_secrets_arn = var.discord_public_key_secrets_arn
@@ -28,17 +30,18 @@ data "archive_file" "lambda_files" {
 }
 
 resource "aws_lambda_function" "lambda_functions" {
-  for_each         = local.lambda_options
-  function_name    = "${var.prefix}-${each.value.name}-lambda"
-  filename         = data.archive_file.lambda_files[each.key].output_path
-  source_code_hash = data.archive_file.lambda_files[each.key].output_base64sha256
-  handler          = each.value.handler
-  role             = aws_iam_role.lambda_roles[each.key].arn
-  runtime          = local.lambda_python_version
-  timeout          = lookup(each.value, "timeout", 120)
-  memory_size      = lookup(each.value, "memory_size", 128)
-  layers           = [aws_lambda_layer_version.lambda_layer.arn, "arn:aws:lambda:${data.aws_region.current.name}:${var.secrets_manager_cache_lambda_layer_account_id}:layer:AWS-Parameters-and-Secrets-Lambda-Extension:${var.secrets_manager_cache_lambda_layer_version}"]
-  publish          = true
+  for_each                       = local.lambda_options
+  function_name                  = "${var.prefix}-${each.value.name}-lambda"
+  filename                       = data.archive_file.lambda_files[each.key].output_path
+  source_code_hash               = data.archive_file.lambda_files[each.key].output_base64sha256
+  handler                        = each.value.handler
+  role                           = aws_iam_role.lambda_roles[each.key].arn
+  runtime                        = local.lambda_python_version
+  timeout                        = lookup(each.value, "timeout", 120)
+  memory_size                    = lookup(each.value, "memory_size", 128)
+  layers                         = [aws_lambda_layer_version.lambda_layer.arn, "arn:aws:lambda:${data.aws_region.current.name}:${var.secrets_manager_cache_lambda_layer_account_id}:layer:AWS-Parameters-and-Secrets-Lambda-Extension:${var.secrets_manager_cache_lambda_layer_version}"]
+  publish                        = lookup(each.value, "publish_lambda", false)
+  reserved_concurrent_executions = lookup(each.value, "reserved_concurrency", -1)
   environment {
     variables = lookup(each.value, "env_variables", {})
   }
@@ -48,16 +51,14 @@ resource "aws_lambda_function" "lambda_functions" {
   }
 }
 
-resource "aws_lambda_provisioned_concurrency_config" "max_concurrency" {
-  function_name                     = aws_lambda_function.lambda_functions[local.lambda_options.discord-gems.name].function_name
-  provisioned_concurrent_executions = var.lambda_max_concurrency
-  qualifier                         = aws_lambda_function.lambda_functions[local.lambda_options.discord-gems.name].version
-  depends_on = [
-    aws_lambda_function.lambda_functions
-  ]
-}
-
 resource "aws_lambda_function_url" "discord_gems_url" {
   function_name      = aws_lambda_function.lambda_functions[local.lambda_options.discord-gems.name].function_name
   authorization_type = "NONE"
+}
+
+resource "aws_lambda_function_event_invoke_config" "invoke_config" {
+  for_each                     = local.lambda_options
+  function_name                = aws_lambda_function.lambda_functions[each.value.name].function_name
+  maximum_event_age_in_seconds = var.lambda_maximum_event_age_in_seconds
+  maximum_retry_attempts       = 2
 }

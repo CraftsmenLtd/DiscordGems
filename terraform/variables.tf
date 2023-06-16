@@ -45,3 +45,21 @@ variable "secrets_manager_cache_lambda_layer_version" {
   description = "The secrets manager caching layer version for your region. Default set to 4. More https://docs.aws.amazon.com/systems-manager/latest/userguide/ps-integration-lambda-extensions.html#ps-integration-lambda-extensions-add"
   default     = 4
 }
+
+variable "lambda_reserved_concurrency" {
+  type        = number
+  description = "Discord gems lambda reserved concurrency"
+  default     = 5
+}
+
+variable "lambda_maximum_event_age_in_seconds" {
+  type        = number
+  description = "Discord gems lambda request queue event max duration"
+  default     = 120
+}
+
+variable "billing_tag" {
+  type        = string
+  description = "AWS billing tag value"
+  default     = "billing"
+}

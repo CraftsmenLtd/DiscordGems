@@ -1,10 +1,10 @@
 locals {
-  lambda_python_version = "python3.8"
-  requirements_filepath = "${path.module}/../requirements.txt"
+  lambda_python_version     = "python3.8"
+  requirements_filepath     = "${path.module}/../requirements.txt"
   lambda_layer_zipfile_name = "craftsmen-bot-layer"
 
   # WARNING: Do not change it
-  lambda_layer_dir   = "${path.module}/python"
+  lambda_layer_dir = "${path.module}/python"
 }
 
 resource "null_resource" "build_lambda_layer" {

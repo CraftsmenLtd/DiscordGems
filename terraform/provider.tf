@@ -7,3 +7,11 @@ terraform {
     }
   }
 }
+
+provider "aws" {
+  default_tags {
+    tags = {
+      DiscordGems = var.billing_tag
+    }
+  }
+}
