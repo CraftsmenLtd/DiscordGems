@@ -6,7 +6,7 @@ locals {
       policy               = data.aws_iam_policy_document.discord_gems_policy
       handler              = "handler.handler"
       timeout              = 120
-      memory_size          = 128
+      memory_size          = 512
       publish_lambda       = true
       reserved_concurrency = var.lambda_reserved_concurrency
       env_variables = {
