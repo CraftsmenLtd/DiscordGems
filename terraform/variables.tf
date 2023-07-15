@@ -3,7 +3,7 @@ variable "prefix" {
   description = "AWS Resources name prefix"
 }
 
-variable "discord_public_key_secrets_arn" {
+variable "discord_public_key_secret_arn" {
   type        = string
   description = "Discord bot public key in general information page"
   sensitive   = true

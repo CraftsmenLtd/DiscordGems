@@ -12,7 +12,6 @@ from communication import send_channel_message
 from constants import load_environment_variables
 from dynamo import (get_monthly_rank, insert_gem_to_dynamo,
                     sender_gem_count_today)
-from secrets_manager_helper import get_cached_secret
 
 PING_PONG = {"type": 1}
 
@@ -33,8 +32,7 @@ def handler(event, _):
 
     # verify the signature
     try:
-        verify_signature(event, get_cached_secret(
-            env_vars.discord_public_key_secrets_arn))
+        verify_signature(event, env_vars.discord_public_key)
     except Exception as e:
         raise Exception(f"[UNAUTHORIZED] Invalid request signature: {e}")
 
@@ -111,10 +109,7 @@ def gem_handler(body: Dict[str, Any], env_vars):
 
 
 def _handle_trigger_from_cron(env_vars):
-    discord_bot_token: str = get_cached_secret(
-        env_vars.discord_bot_token_secret_arn
-    )
-
+    """Handles auto triggers from cron job"""
     last_month_last_day = datetime.datetime.today().replace(day=1) - datetime.timedelta(
         days=1
     )
@@ -125,7 +120,7 @@ def _handle_trigger_from_cron(env_vars):
         rank, f"**:calendar: Top members of {calendar.month_name[month]} :calendar:**")
 
     send_channel_message(
-        discord_bot_token,
+        env_vars.discord_bot_token,
         int(env_vars.discord_gems_channel),
         message
     )

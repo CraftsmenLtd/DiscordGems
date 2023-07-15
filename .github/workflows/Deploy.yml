@@ -26,7 +26,7 @@ env:
   TF_BACKEND_BUCKET_REGION: ${{ secrets.TF_BACKEND_BUCKET_REGION }}
   TF_VARS: >-
     -var="max_gems_per_day=${{ vars.MAX_GEMS_PER_DAY }}"
-    -var="discord_public_key_secrets_arn=${{ secrets.DISCORD_PUBLIC_KEY_SECRETS_ARN }}"
+    -var="discord_public_key_secret_arn=${{ secrets.DISCORD_PUBLIC_KEY_SECRETS_ARN }}"
     -var="discord_gems_channel=${{ vars.DISCORD_GEMS_CHANNEL }}"
     -var="discord_bot_token_secret_arn=${{ secrets.DISCORD_BOT_TOKEN_SECRETS_ARN }}"
     -var="prefix=${{ vars.PREFIX }}"
