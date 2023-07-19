@@ -46,7 +46,7 @@ To get this application to work, you must first create a discord bot 🤖 to int
 | Variable Name | Description | Default Value |
 | ------------- | ------------- | ------------- |
 | `prefix` | Resource names to prefix with | None |
-| `discord_public_key_secrets_arn` | A secrets manager arn for discord public key | None |
+| `discord_public_key_secret_arn` | A secrets manager arn for discord public key | None |
 | `max_gems_per_day` | Maximum gems one can give per day | 5 |
 | `lambda_max_concurrency` | Maximum number of lambdas that can run at a given time | 5 |
 | `discord_gems_channel` | Discord channel to use the gem command in. Do not pass this value or set empty string ("") if you want to give gem from any channel | "" |

@@ -6,16 +6,16 @@ locals {
       policy               = data.aws_iam_policy_document.discord_gems_policy
       handler              = "handler.handler"
       timeout              = 120
-      memory_size          = 128
+      memory_size          = 512
       publish_lambda       = true
       reserved_concurrency = var.lambda_reserved_concurrency
       env_variables = {
-        gems_table_name                = aws_dynamodb_table.gems_table.name
-        discord_public_key_secrets_arn = var.discord_public_key_secrets_arn
-        max_gems_per_day               = var.max_gems_per_day
-        discord_gems_channel           = var.discord_gems_channel
-        monthly_cron_rule              = aws_cloudwatch_event_rule.monthly_cron_rule.arn
-        discord_bot_token_secret_arn   = var.discord_bot_token_secret_arn
+        gems_table_name      = aws_dynamodb_table.gems_table.name
+        discord_public_key   = data.aws_secretsmanager_secret_version.discord_bot_token.secret_string
+        max_gems_per_day     = var.max_gems_per_day
+        discord_gems_channel = var.discord_gems_channel
+        monthly_cron_rule    = aws_cloudwatch_event_rule.monthly_cron_rule.arn
+        discord_bot_token    = data.aws_secretsmanager_secret_version.discord_bot_token.secret_string
       }
     }
   }
