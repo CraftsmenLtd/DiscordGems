@@ -11,7 +11,7 @@ locals {
       reserved_concurrency = var.lambda_reserved_concurrency
       env_variables = {
         gems_table_name      = aws_dynamodb_table.gems_table.name
-        discord_public_key   = data.aws_secretsmanager_secret_version.discord_bot_token.secret_string
+        discord_public_key   = data.aws_secretsmanager_secret_version.discord_public_key.secret_string
         max_gems_per_day     = var.max_gems_per_day
         discord_gems_channel = var.discord_gems_channel
         monthly_cron_rule    = aws_cloudwatch_event_rule.monthly_cron_rule.arn
