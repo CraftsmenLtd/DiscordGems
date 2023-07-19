@@ -4,11 +4,11 @@ from typing import List, Set, Type
 
 LAMBDA_ENVIRONMENT_VARIABLES: Set[str] = {
     "gems_table_name",
-    "discord_public_key_secret_arn",
+    "discord_public_key",
     "max_gems_per_day",
     "discord_gems_channel",
     "monthly_cron_rule",
-    "discord_bot_token_secret_arn",
+    "discord_bot_token",
 }
 
 
