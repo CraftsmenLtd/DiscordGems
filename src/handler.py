@@ -10,6 +10,7 @@ from nacl.signing import VerifyKey
 from command import GemsMessage, is_rank_command, slash_command_response
 from communication import send_channel_message
 from constants import load_environment_variables
+from message_gems_decorator import replace_gem_template_with_real_gem
 from dynamo import (get_monthly_rank, insert_gem_to_dynamo,
                     sender_gem_count_today)
 
@@ -96,7 +97,7 @@ def gem_handler(body: Dict[str, Any], env_vars):
             return slash_command_response(
                 f"**:heart_eyes: {gems_message.sender_username} to **"
                 f"<@{gems_message.receiver_discord_id}>: "
-                f"{gems_message.gem_message}"
+                f"{replace_gem_template_with_real_gem(gems_message.gem_message, gems_message.gem_count)}"
             )
         else:
             return slash_command_response(
