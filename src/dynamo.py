@@ -34,7 +34,7 @@ class GemsModel(Model):
     receiver = UnicodeAttribute()
     gem_count = NumberAttribute()
     date = UnicodeAttribute()
-    expire_after = UnicodeAttribute()
+    remove_after = UnicodeAttribute()
 
     date_index = DateIndex()
 
@@ -102,6 +102,6 @@ def insert_gem_to_dynamo(gems_message: GemsMessage):
         receiver=gems_message.receiver_discord_id,
         gem_count=gems_message.gem_count,
         date=datetime.datetime.today().strftime(DATE_FORMAT),
-        expire_after=time.time() + THIRTY_ONE_DAYS_IN_SECONDS
+        remove_after=time.time() + THIRTY_ONE_DAYS_IN_SECONDS
     )
     gems.save()
