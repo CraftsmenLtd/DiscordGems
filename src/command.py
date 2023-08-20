@@ -1,7 +1,7 @@
 """Discord slash command helpers"""
+import re
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional
-
 
 @dataclass
 class GemsMessage:
@@ -50,33 +50,12 @@ class GemsMessage:
 
 
 class GemsCounterFromMessage:
-    def __get_int_converted_gem_count(self, gem_count_string: str):
-        if gem_count_string.isdigit():
-            return int(gem_count_string)
-        try:
-            gem_count_float = float(gem_count_string)
-            return int(gem_count_float)
-        except ValueError:
-            return 0
-
     def _get_gem_count_from_gem_string(self, message: str):
-        gem_message_string_anchor = '$gem-'
-        if message.count(gem_message_string_anchor) == 0:
+        gem_message_string_regex = r'(?:\s|^)\$gem-\d+(?:\s|$)'
+        gem_message_words = re.findall(gem_message_string_regex, message)
+        if len(gem_message_words) == 0:
             return 0
-
-        gem_message_words = message.split()
-        # consider first $gem-number for multiple $gem-number in message
-        for message_segment in gem_message_words:
-            if gem_message_string_anchor in message_segment:
-                if message_segment.count(gem_message_string_anchor) > 1:
-                    return 0
-                
-                gem_count_string = message_segment.replace(gem_message_string_anchor, '')
-                gem_count = self.__get_int_converted_gem_count(gem_count_string)
-                if gem_count > 0:
-                    return gem_count
-
-        return 0
+        return int(re.search('\d+', gem_message_words[0]).group())
 
     def get_gem_count_in_message(self, message: str):
         gem_count_in_message = message.count("💎")

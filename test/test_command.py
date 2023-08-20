@@ -34,8 +34,8 @@ class TestGemsCounterFromStringMessage(unittest.TestCase):
     def test_message_with_multiple_hyphens_in_gem_string_returns_integer_gem_count(self):
         assert_gem_count(self, '$gem----3 for the help', 0)
     
-    def test_message_with_decimal_number_gem_string_returns_integer_gem_count(self):
-        assert_gem_count(self, '$gem-10.12 for the help', 10)
+    def test_message_with_decimal_number_gem_string_returns_0_gem_count(self):
+        assert_gem_count(self, '$gem-10.12 for the help', 0)
     
     def test_message_with_gem_string_with_string_returns_0_gem_count(self):
         assert_gem_count(self, '$gem-abcd for the help', 0)
