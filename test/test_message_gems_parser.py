@@ -1,8 +1,8 @@
 import unittest
-from src.command import GemsCounterFromMessage
+from src.message_gems_parser import get_gem_count_in_message
 
 def assert_gem_count(unittest_instance, discord_message, expected_gems_count):
-    gems_count = GemsCounterFromMessage().get_gem_count_in_message(discord_message)
+    gems_count = get_gem_count_in_message(discord_message)
     unittest_instance.assertEqual(gems_count, expected_gems_count)
 
 class TestGemsCounterFromGemMessage(unittest.TestCase):
