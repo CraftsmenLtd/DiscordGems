@@ -1,14 +1,14 @@
 import re
 
 def get_gem_count_from_gem_string(message: str):
-    gem_template_string_anchor = '-gems'
-    gem_message_string_regex = fr'(?:\s|^)\d+{gem_template_string_anchor}(?:\s|$)'
+    gem_template_string_anchor = 'gems-'
+    gem_message_string_regex = fr'(?:\s|^){gem_template_string_anchor}\d+(?:\s|$)'
     probable_gem_message_word = re.search(gem_message_string_regex, message)
     if not probable_gem_message_word:
         return 0
     
     gem_message_word = probable_gem_message_word.group().strip()
-    return int(gem_message_word[: -len(gem_template_string_anchor)])
+    return int(gem_message_word[len(gem_template_string_anchor):])
 
 def get_gem_count_in_message(message: str):
     gem_count_in_message = message.count("💎")

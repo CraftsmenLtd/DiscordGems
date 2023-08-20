@@ -17,50 +17,50 @@ class TestGemsCounterFromGemMessage(unittest.TestCase):
 
 class TestGemsCounterFromStringMessage(unittest.TestCase):
     def test_message_with_gem_string_returns_correct_gem_count(self):
-        assert_gem_count(self, '2-gems for the help', 2)
+        assert_gem_count(self, 'gems-2 for the help', 2)
     
     def test_message_with_1000_gem_string_returns_correct_gem_count(self):
-        assert_gem_count(self, '1000-gems for the help', 1000)
+        assert_gem_count(self, 'gems-1000 for the help', 1000)
     
     def test_message_with_0_gem_string_returns_correct_gem_count(self):
-        assert_gem_count(self, '0-gems for the help', 0)
+        assert_gem_count(self, 'gems-0 for the help', 0)
 
     def test_message_with_gem_string_with_multiple_spaces_returns_correct_gem_count(self):
-        assert_gem_count(self, '  2-gems  for the help', 2)
+        assert_gem_count(self, '  gems-2  for the help', 2)
 
     def test_message_with_multiple_gem_strings_returns_first_gem_count(self):
-        assert_gem_count(self, '2-gems 3-gems for the help', 2)
+        assert_gem_count(self, 'gems-2 gems-3 for the help', 2)
     
     def test_message_with_multiple_hyphens_in_gem_string_returns_integer_gem_count(self):
-        assert_gem_count(self, '3-----gems for the help', 0)
+        assert_gem_count(self, 'gems------3---- for the help', 0)
     
     def test_message_with_decimal_number_gem_string_returns_0_gem_count(self):
-        assert_gem_count(self, '10.12-gems for the help', 0)
+        assert_gem_count(self, 'gems-10.12 for the help', 0)
     
     def test_message_with_gem_string_with_string_returns_0_gem_count(self):
-        assert_gem_count(self, 'abcd-gems for the help', 0)
+        assert_gem_count(self, 'gems-abcd for the help', 0)
     
     def test_message_with_gem_string_with_string_hyphen_number_returns_0_gem_count(self):
-        assert_gem_count(self, 'abcd-10-gems for the help', 0)
+        assert_gem_count(self, 'gems-abcd-10 for the help', 0)
 
     def test_message_with_gem_string_with_string_and_number_returns_0_gem_count(self):
-        assert_gem_count(self, 'abcd10-gems for the help', 0)
+        assert_gem_count(self, 'gems-abcd10 for the help', 0)
     
     def test_message_with_multiple_gem_strings_together_returns_0_count(self):
-        assert_gem_count(self, '2-gems3-gems for the help', 0)
+        assert_gem_count(self, 'gems-2gems-3 for the help', 0)
     
     def test_message_with_valid_and_invalid_gem_strings_returns_valid_count(self):
-        assert_gem_count(self, 'abcde-gems 3-gems for the help', 3)
+        assert_gem_count(self, 'gems-abcde gems-3 for the help', 3)
 
     def test_message_with_no_gem_string_returns_0_gem_count(self):
         assert_gem_count(self, 'no gems given', 0)
 
 class TestGemsAndGemsStringCounterFromMessage(unittest.TestCase):
     def test_message_with_gem_and_gem_string_returns_gem_count(self):
-        assert_gem_count(self, '💎💎💎 5-gems for the help', 3)
+        assert_gem_count(self, '💎💎💎 gems-5 for the help', 3)
     
     def test_message_with_gem_string_and_gem_returns_gem_count(self):
-        assert_gem_count(self, '5-gems 💎💎💎 for the help', 3)
+        assert_gem_count(self, 'gems-5 💎💎💎 for the help', 3)
 
 if __name__ == '__main__':
     unittest.main()
