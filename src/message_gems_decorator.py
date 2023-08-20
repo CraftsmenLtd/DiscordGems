@@ -1,5 +1,5 @@
 import re
-from .message_gems_parser import gem_message_string_regex
+from message_gems_parser import gem_message_string_regex
 
 def replace_gem_template_with_real_gem(message_with_gem_template: str, gem_count: int):
     if '💎' in message_with_gem_template or gem_count == 0:
