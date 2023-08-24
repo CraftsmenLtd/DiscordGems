@@ -14,6 +14,11 @@ resource "aws_dynamodb_table" "gems_table" {
     type = "S"
   }
 
+  ttl {
+    attribute_name = "remove_after"
+    enabled        = true
+  }
+
   global_secondary_index {
     name               = "date-index"
     hash_key           = "date"

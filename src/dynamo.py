@@ -2,6 +2,7 @@
 import calendar
 import datetime
 import os
+import time
 import uuid
 from typing import Dict, List, Optional
 
@@ -12,6 +13,7 @@ from pynamodb.models import Model
 from command import GemsMessage
 
 DATE_FORMAT = "%Y-%m-%d"
+THIRTY_ONE_DAYS_IN_SECONDS = 60 * 60 * 24 * 31
 
 
 class DateIndex(GlobalSecondaryIndex):
@@ -32,6 +34,7 @@ class GemsModel(Model):
     receiver = UnicodeAttribute()
     gem_count = NumberAttribute()
     date = UnicodeAttribute()
+    remove_after = UnicodeAttribute()
 
     date_index = DateIndex()
 
@@ -98,6 +101,7 @@ def insert_gem_to_dynamo(gems_message: GemsMessage):
         sender=gems_message.sender_discord_id,
         receiver=gems_message.receiver_discord_id,
         gem_count=gems_message.gem_count,
-        date=datetime.datetime.today().strftime(DATE_FORMAT)
+        date=datetime.datetime.today().strftime(DATE_FORMAT),
+        remove_after=time.time() + THIRTY_ONE_DAYS_IN_SECONDS
     )
     gems.save()
