@@ -34,7 +34,7 @@ class GemsModel(Model):
     receiver = UnicodeAttribute()
     gem_count = NumberAttribute()
     date = UnicodeAttribute()
-    remove_after = UnicodeAttribute()
+    remove_after = NumberAttribute()
 
     date_index = DateIndex()
 
