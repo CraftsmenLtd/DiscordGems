@@ -75,6 +75,21 @@ def sender_gem_count_today(sender: str):
     return total_gems
 
 
+def sender_to_receiver_gem_count_today(sender: str, receiver: str):
+    """Sender Gem count for today" given to themselves"""
+
+    items: List[GemsModel] = _scan_with_condition(
+        (GemsModel.sender == sender) &
+        (GemsModel.receiver == receiver) &
+        (GemsModel.date == datetime.datetime.today().strftime(DATE_FORMAT))
+    )
+
+    total_gems: int = 0
+    for item in items:
+        total_gems += item.gem_count
+    return total_gems
+
+
 def get_monthly_rank(month: int, year: int) -> Dict[str, int]:
     last_day: int = calendar.monthrange(year, month)[1]
     start_date = datetime.datetime(year, month, 1)

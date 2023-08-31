@@ -12,9 +12,10 @@ from communication import send_channel_message
 from constants import load_environment_variables
 from message_gems_decorator import replace_gem_template_with_real_gem
 from dynamo import (get_monthly_rank, insert_gem_to_dynamo,
-                    sender_gem_count_today)
+                    sender_gem_count_today, sender_to_receiver_gem_count_today)
 
 PING_PONG = {"type": 1}
+MAX_GEMS_TO_SELF_PER_DAY = 1
 
 LOGGER = logging.getLogger(__name__)
 LOGGER.setLevel(logging.INFO)
@@ -81,7 +82,7 @@ def gem_handler(body: Dict[str, Any], env_vars):
         LOGGER.info(f"Gem message: {gems_message}")
 
         if gems_message.sender_discord_id == gems_message.receiver_discord_id:
-            return slash_command_response("**:x: You can not give 💎s to yourself :x:**")
+            return self_gem(gems_message)
 
         if gems_message.is_invalid_receiver:
             return slash_command_response("**:x: Invalid 💎s receiver :x:**")
@@ -99,10 +100,9 @@ def gem_handler(body: Dict[str, Any], env_vars):
                 f"<@{gems_message.receiver_discord_id}>: "
                 f"{replace_gem_template_with_real_gem(gems_message.gem_message, gems_message.gem_count)}"
             )
-        else:
-            return slash_command_response(
-                f"**:1234: You have {max_gem - gems_today} 💎(s) left for today :1234:**"
-            )
+        return slash_command_response(
+            f"**:1234: You have {max_gem - gems_today} 💎(s) left for today :1234:**"
+        )
     except Exception as error:
         LOGGER.error(f"Command failed with {error}")
 
@@ -125,6 +125,20 @@ def _handle_trigger_from_cron(env_vars):
         int(env_vars.discord_gems_channel),
         message
     )
+
+
+def self_gem(gems_message: GemsMessage):
+    """Processes messages where the sender is trying to send gems to themselves"""
+    total_gems_given_to_self = sender_to_receiver_gem_count_today(
+        gems_message.sender_discord_id, gems_message.receiver_discord_id)
+    if total_gems_given_to_self < MAX_GEMS_TO_SELF_PER_DAY:
+        insert_gem_to_dynamo(gems_message)
+        return slash_command_response(
+            f"**:face_holding_back_tears: {gems_message.sender_username} to **"
+            f"themselves; they must've needed this one but we don't judge: "
+            f"{replace_gem_template_with_real_gem(gems_message.gem_message, gems_message.gem_count)}"
+        )
+    return slash_command_response("**:x: You can not give more than one 💎s to yourself in one day :x:**")
 
 
 def handle_rank_command():
