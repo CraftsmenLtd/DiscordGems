@@ -63,36 +63,35 @@ def _scan_with_condition(
     return items
 
 
-def is_receiver_available(sender: str):
+def is_receiver_available(user: str):
     """Check if receiver is available"""
     items: List[GemsModel] = _scan_with_condition(
-        (GemsModel.sender == sender) &
-        (GemsModel.receiver == sender) &
+        (GemsModel.sender == user) &
+        (GemsModel.receiver == user) &
         (GemsModel.opt_out == True)
     )
     return len(items) == 0
 
 
-def insert_opt_out(gems_message: GemsMessage):
+def insert_opt_out(user: str):
     """Insert an opt-out record in DDB"""
-    if is_receiver_available(gems_message.sender_discord_id):
-        gems = GemsModel(
-            uuid=str(uuid.uuid4()),
-            sender=gems_message.sender_discord_id,
-            receiver=gems_message.sender_discord_id,
-            gem_count=0,
-            opt_out=True,
-            date=datetime.datetime.today().strftime(DATE_FORMAT),
-            remove_after=time.time() + TEN_YEARS_IN_SECONDS
-        )
-        gems.save()
+    gems = GemsModel(
+        uuid=str(uuid.uuid4()),
+        sender=user,
+        receiver=user,
+        gem_count=0,
+        opt_out=True,
+        date=datetime.datetime.today().strftime(DATE_FORMAT),
+        remove_after=time.time() + TEN_YEARS_IN_SECONDS
+    )
+    gems.save()
 
 
-def remove_opt_out(sender: str):
+def remove_opt_out(user: str):
     """Remove opt-out record for a user"""
     items: List[GemsModel] = _scan_with_condition(
-        (GemsModel.sender == sender) &
-        (GemsModel.receiver == sender) &
+        (GemsModel.sender == user) &
+        (GemsModel.receiver == user) &
         (GemsModel.opt_out == True)
     )
     for item in items:

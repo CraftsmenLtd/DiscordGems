@@ -46,6 +46,16 @@ class DiscordAppRegistration:
                             "required": True
                         }
                     ]
+                },
+                {
+                    "name": "opt-out",
+                    "description": "Opt-out from receiving gem",
+                    "type": 1
+                },
+                {
+                    "name": "opt-in",
+                    "description": "Opt-in to receive gem",
+                    "type": 1
                 }
             ]
         }

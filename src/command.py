@@ -57,6 +57,22 @@ def is_rank_command(body: Dict[str, Any]) -> bool:
     return False
 
 
+def is_opt_out_command(body: Dict[str, Any]) -> bool:
+    """Check if the command is for opting out"""
+    for option in body["data"]["options"]:
+        if option.get("name") == "opt-out":
+            return True
+    return False
+
+
+def is_opt_in_command(body: Dict[str, Any]) -> bool:
+    """Check if the command is for opting in"""
+    for option in body["data"]["options"]:
+        if option.get("name") == "opt-in":
+            return True
+    return False
+
+
 def slash_command_response(content: str):
     """Slash command response"""
     return {

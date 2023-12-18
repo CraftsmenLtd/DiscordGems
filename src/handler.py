@@ -7,12 +7,12 @@ from typing import Any, Dict, List, Optional
 
 from nacl.signing import VerifyKey
 
-from command import GemsMessage, is_rank_command, slash_command_response
+from command import GemsMessage, is_rank_command, is_opt_out_command, is_opt_in_command, slash_command_response
 from communication import send_channel_message
 from constants import load_environment_variables
 from message_gems_decorator import replace_gem_template_with_real_gem
-from dynamo import (get_monthly_rank, insert_gem_to_dynamo,
-                    sender_gem_count_today, sender_to_receiver_gem_count_today)
+from dynamo import (get_monthly_rank, insert_gem_to_dynamo, insert_opt_out, is_receiver_available,
+                    remove_opt_out, sender_gem_count_today, sender_to_receiver_gem_count_today)
 
 PING_PONG = {"type": 1}
 MAX_GEMS_TO_SELF_PER_DAY = 1
@@ -81,6 +81,14 @@ def gem_handler(body: Dict[str, Any], env_vars):
         gems_message: GemsMessage = GemsMessage.from_slash_command(body)
         LOGGER.info(f"Gem message: {gems_message}")
 
+        if is_opt_out_command(body):
+            return handle_opt_out(gems_message)    
+        elif is_opt_in_command(body):
+            return handle_opt_in(gems_message)
+
+        if not is_receiver_available(gems_message.sender_discord_id):
+            return slash_command_response("**:x: User has opted out from receiving any gems at this time :x:**")
+
         if gems_message.sender_discord_id == gems_message.receiver_discord_id:
             return self_gem(gems_message)
 
@@ -139,6 +147,24 @@ def self_gem(gems_message: GemsMessage):
             f"{replace_gem_template_with_real_gem(gems_message.gem_message, gems_message.gem_count)}"
         )
     return slash_command_response("**:x: You can not give more than one 💎s to yourself in one day :x:**")
+
+
+def handle_opt_out(gems_message: GemsMessage):
+    """Opt-out user from receiving gems"""
+    sender = gems_message.sender_discord_id
+    if is_receiver_available(sender):
+        insert_opt_out(sender)
+        return slash_command_response("**:pleading_face: You have successfully opted out of receiving gems**")
+    return slash_command_response(f"**:pleading_face: You are already opted out**")
+
+
+def handle_opt_in(gems_message: GemsMessage):
+    """Opt-in again"""
+    sender = gems_message.sender_discord_id
+    if not is_receiver_available(sender):
+        remove_opt_out(sender)
+        return slash_command_response("**:star_struck: You have successfully opted in to receive gems**")
+    return slash_command_response(f"**:star_struck: You are already opted in**")
 
 
 def handle_rank_command():
