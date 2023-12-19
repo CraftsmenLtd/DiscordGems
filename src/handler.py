@@ -88,7 +88,7 @@ def gem_handler(body: Dict[str, Any], env_vars):
         elif is_opt_in_command(body):
             return handle_opt_in(gems_message)
 
-        if not is_receiver_available(gems_message.sender_discord_id):
+        if not is_receiver_available(gems_message.receiver_discord_id):
             return slash_command_response("**:x: User has opted out from receiving any gems at this time :x:**")
 
         if gems_message.sender_discord_id == gems_message.receiver_discord_id:

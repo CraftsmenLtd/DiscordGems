@@ -63,11 +63,11 @@ def _scan_with_condition(
     return items
 
 
-def is_receiver_available(sender: str):
+def is_receiver_available(receiver: str):
     """Check if receiver is available"""
     items: List[GemsModel] = _scan_with_condition(
-        (GemsModel.sender == sender) &
-        (GemsModel.receiver == sender) &
+        (GemsModel.sender == receiver) &
+        (GemsModel.receiver == receiver) &
         (GemsModel.opt_out == True)
     )
     return len(items) == 0
