@@ -72,14 +72,14 @@ def is_receiver_available(receiver: str):
     return len(items) == 0
 
 
-def insert_opt_out(sender: str):
+def insert_opt_out(user: str):
     """Insert an opt-out record in DDB"""
     today = datetime.datetime.today().strftime(DATE_FORMAT)
     remove_after_time = time.time() + THIRTY_ONE_DAYS_IN_SECONDS
     gems = GemsModel(
         uuid=str(uuid.uuid4()),
-        sender=sender,
-        receiver=sender,
+        sender=user,
+        receiver=user,
         gem_count=0,
         opt_out=True,
         date=today,
@@ -89,11 +89,11 @@ def insert_opt_out(sender: str):
     return remove_after_time
 
 
-def remove_opt_out(sender: str):
+def remove_opt_out(user: str):
     """Remove opt-out record for a user"""
     items: List[GemsModel] = _scan_with_condition(
-        (GemsModel.sender == sender) &
-        (GemsModel.receiver == sender) &
+        (GemsModel.sender == user) &
+        (GemsModel.receiver == user) &
         (GemsModel.opt_out == True)
     )
     for item in items:

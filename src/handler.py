@@ -79,17 +79,23 @@ def gem_handler(body: Dict[str, Any], env_vars):
     try:
         if is_rank_command(body):
             return handle_rank_command()
+        
+        if is_opt_out_command(body):
+            user_discord_id: str = _get_sender_discord_id(body)
+            return handle_opt_out(user_discord_id)    
+        
+        if is_opt_in_command(body):
+            user_discord_id: str = _get_sender_discord_id(body)
+            return handle_opt_in(user_discord_id)
 
         gems_message: GemsMessage = GemsMessage.from_slash_command(body)
         LOGGER.info(f"Gem message: {gems_message}")
 
-        if is_opt_out_command(body):
-            return handle_opt_out(gems_message)    
-        elif is_opt_in_command(body):
-            return handle_opt_in(gems_message)
-
         if not is_receiver_available(gems_message.receiver_discord_id):
-            return slash_command_response(f"**:pleading_face: {gems_message.receiver_discord_id} has chosen solitude and is temporarily not receiving any gems. Thank you for the acknowledgment, by the way :heart:**")
+            return slash_command_response(f"""
+                **:pleading_face: {gems_message.receiver_discord_id} has chosen solitude and is temporarily not receiving any gems. 
+                Thank you for the acknowledgment, by the way :heart:**
+            """)
 
         if gems_message.sender_discord_id == gems_message.receiver_discord_id:
             return self_gem(gems_message)
@@ -117,6 +123,10 @@ def gem_handler(body: Dict[str, Any], env_vars):
         LOGGER.error(f"Command failed with {error}")
 
     return slash_command_response(f"**{emojis.MAN_SHRUGGING} Message parsing failed. Please contact with admin {emojis.MAN_SHRUGGING}**")
+
+
+def _get_sender_discord_id(body: Dict[str, Any]):
+    return body["member"]["user"]["id"]
 
 
 def _handle_trigger_from_cron(env_vars):
@@ -151,21 +161,19 @@ def self_gem(gems_message: GemsMessage):
     return slash_command_response(f"**{emojis.X} You can not give more than one {emojis.GEM}s to yourself in one day {emojis.X}**")
 
 
-def handle_opt_out(gems_message: GemsMessage):
+def handle_opt_out(user_discord_id: str):
     """Opt-out user from receiving gems"""
-    sender = gems_message.sender_discord_id
-    if is_receiver_available(sender):
-        expire_on = insert_opt_out(sender)
+    if is_receiver_available(user_discord_id):
+        expire_on = insert_opt_out(user_discord_id)
         expire_on_readable = datetime.datetime.fromtimestamp(expire_on).strftime('%d-%m-%Y')
         return slash_command_response(f"**:pleading_face: You have successfully opted out of receiving gems, effective until {expire_on_readable}**")
     return slash_command_response(f"**:pleading_face: You are already opted out**")
 
 
-def handle_opt_in(gems_message: GemsMessage):
+def handle_opt_in(user_discord_id: str):
     """Opt-in again"""
-    sender = gems_message.sender_discord_id
-    if not is_receiver_available(sender):
-        remove_opt_out(sender)
+    if not is_receiver_available(user_discord_id):
+        remove_opt_out(user_discord_id)
         return slash_command_response("**:star_struck: You have successfully opted in to receive gems**")
     return slash_command_response(f"**:star_struck: You are already opted in**")
 
