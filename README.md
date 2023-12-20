@@ -12,6 +12,8 @@ For discord the short code is :gem:
 ## Our Commands
 - `/gem appreciate <a_user> <a message containing 💎 emojis>`: Must include :gem: emoji. You can have up to `max_gems_per_day` :gem: emojis in the message
 - `/gem rank`: Ranks the 💎 leader board
+- `/gem opt-out`: Use this command to opt-out of receiving 💎 appreciations.
+- `/gem opt-in`: Use this command to opt-in again for receiving 💎 appreciations after opting out.
 
 *This is our implementation. We've tried to write the code in an extensible way. We will keep working on it as we see fit. We encourage the community to raise pull requests and help us fix issues.*
 
