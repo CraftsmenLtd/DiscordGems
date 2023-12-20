@@ -87,7 +87,7 @@ def gem_handler(body: Dict[str, Any], env_vars):
             return handle_opt_in(gems_message)
 
         if not is_receiver_available(gems_message.receiver_discord_id):
-            return slash_command_response("**:x: User has opted out from receiving any gems at this time :x:**")
+            return slash_command_response(f"**:pleading_face: {gems_message.receiver_discord_id} has chosen solitude and is temporarily not receiving any gems. Thank you for the acknowledgment, by the way :heart:**")
 
         if gems_message.sender_discord_id == gems_message.receiver_discord_id:
             return self_gem(gems_message)
@@ -153,8 +153,9 @@ def handle_opt_out(gems_message: GemsMessage):
     """Opt-out user from receiving gems"""
     sender = gems_message.sender_discord_id
     if is_receiver_available(sender):
-        insert_opt_out(sender)
-        return slash_command_response("**:pleading_face: You have successfully opted out of receiving gems**")
+        expire_on = insert_opt_out(sender)
+        expire_on_readable = datetime.datetime.fromtimestamp(expire_on).strftime('%d-%m-%Y')
+        return slash_command_response(f"**:pleading_face: You have successfully opted out of receiving gems, effective until {expire_on_readable}**")
     return slash_command_response(f"**:pleading_face: You are already opted out**")
 
 
