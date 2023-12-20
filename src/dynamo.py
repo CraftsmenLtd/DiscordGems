@@ -14,7 +14,6 @@ from command import GemsMessage
 
 DATE_FORMAT = "%Y-%m-%d"
 THIRTY_ONE_DAYS_IN_SECONDS = 60 * 60 * 24 * 31
-TEN_YEARS_IN_SECONDS = 3600 * 24 * 365 * 10
 
 
 class DateIndex(GlobalSecondaryIndex):
@@ -75,16 +74,19 @@ def is_receiver_available(receiver: str):
 
 def insert_opt_out(sender: str):
     """Insert an opt-out record in DDB"""
+    today = datetime.datetime.today().strftime(DATE_FORMAT)
+    remove_after_time = time.time() + THIRTY_ONE_DAYS_IN_SECONDS
     gems = GemsModel(
         uuid=str(uuid.uuid4()),
         sender=sender,
         receiver=sender,
         gem_count=0,
         opt_out=True,
-        date=datetime.datetime.today().strftime(DATE_FORMAT),
-        remove_after=time.time() + TEN_YEARS_IN_SECONDS
+        date=today,
+        remove_after=remove_after_time
     )
     gems.save()
+    return remove_after_time
 
 
 def remove_opt_out(sender: str):
