@@ -49,7 +49,7 @@ class DiscordAppRegistration:
                 },
                 {
                     "name": "opt-out",
-                    "description": "Opt-out from receiving gem",
+                    "description": "Opt-out of receiving gem",
                     "type": 1
                 },
                 {
