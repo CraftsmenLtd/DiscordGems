@@ -1,8 +1,9 @@
 """Discord slash command helpers"""
-import re
 from dataclasses import dataclass
+from typing import Any, Callable, Dict, List, Optional
+
 from message_gems_parser import get_gem_count_in_message
-from typing import Any, Dict, List, Optional, Callable
+
 
 @dataclass
 class GemsMessage:
@@ -15,7 +16,8 @@ class GemsMessage:
     gem_count: int = 0
 
     @classmethod
-    def from_slash_command(cls, body: Dict[str, Any], gem_counter: Callable = get_gem_count_in_message):
+    def from_slash_command(cls, body: Dict[str, Any],
+                           gem_counter: Callable = get_gem_count_in_message):
         sender: Dict[str, Any] = body["member"]["user"]
         gems_message = cls(
             sender_discord_id=sender["id"],
@@ -48,6 +50,7 @@ class GemsMessage:
         return f"Sender username: {self.sender_username}\n" \
                f"Receiver username: {self.receiver_username}\n" \
                f"Gem message: {self.gem_message}"
+
 
 def is_rank_command(body: Dict[str, Any]) -> bool:
     """Check if the command is for ranking"""
