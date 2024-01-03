@@ -91,7 +91,7 @@ def gem_handler(body: Dict[str, Any], env_vars):
         gems_message: GemsMessage = GemsMessage.from_slash_command(body)
         LOGGER.info(f"Gem message: {gems_message}")
 
-        if not has_receiver_opted_out(gems_message.receiver_discord_id):
+        if has_receiver_opted_out(gems_message.receiver_discord_id):
             receiver = gems_message.receiver_username if hasattr(gems_message, 'receiver_username') else 'Recipient'
             return slash_command_response(f"""
                 **:pleading_face: {receiver} has chosen solitude and is temporarily not receiving any gems. 
@@ -165,15 +165,15 @@ def self_gem(gems_message: GemsMessage):
 def handle_opt_out(user_discord_id: str):
     """Opt-out user from receiving gems"""
     if has_receiver_opted_out(user_discord_id):
-        expire_on = insert_opt_out(user_discord_id)
-        expire_on_readable = datetime.datetime.fromtimestamp(expire_on).strftime('%d-%m-%Y')
-        return slash_command_response(f"**:pleading_face: You have successfully opted out of receiving gems, effective until {expire_on_readable}**")
-    return slash_command_response(f"**:pleading_face: You are already opted out**")
+        return slash_command_response(f"**:pleading_face: You are already opted out**")
+    expire_on = insert_opt_out(user_discord_id)
+    expire_on_readable = datetime.datetime.fromtimestamp(expire_on).strftime('%d-%m-%Y')
+    return slash_command_response(f"**:pleading_face: You have successfully opted out of receiving gems, effective until {expire_on_readable}**")
 
 
 def handle_opt_in(user_discord_id: str):
     """Opt-in again"""
-    if not has_receiver_opted_out(user_discord_id):
+    if has_receiver_opted_out(user_discord_id):
         remove_opt_out(user_discord_id)
         return slash_command_response("**:star_struck: You have successfully opted in to receive gems**")
     return slash_command_response(f"**:star_struck: You are already opted in**")
