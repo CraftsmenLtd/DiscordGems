@@ -7,6 +7,7 @@ from message_gems_parser import get_gem_count_in_message
 
 @dataclass
 class GemsMessage:
+    """Defines the Gem message model"""
     sender_discord_id: str
     sender_username: str
     receiver_discord_id: str
@@ -17,7 +18,7 @@ class GemsMessage:
 
     @classmethod
     def from_slash_command(cls, body: Dict[str, Any],
-                           gem_counter: Callable = get_gem_count_in_message):
+                           gem_counter: Callable[[Any], Any] = get_gem_count_in_message):
         sender: Dict[str, Any] = body["member"]["user"]
         gems_message = cls(
             sender_discord_id=sender["id"],
