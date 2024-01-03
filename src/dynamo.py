@@ -62,14 +62,14 @@ def _scan_with_condition(
     return items
 
 
-def is_receiver_available(receiver: str):
+def has_receiver_opted_out(receiver: str):
     """Check if receiver is available"""
     items: List[GemsModel] = _scan_with_condition(
         (GemsModel.sender == receiver) &
         (GemsModel.receiver == receiver) &
         (GemsModel.opt_out == True)
     )
-    return len(items) == 0
+    return len(items) > 0
 
 
 def insert_opt_out(user: str):

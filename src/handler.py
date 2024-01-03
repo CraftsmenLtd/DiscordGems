@@ -11,7 +11,7 @@ from command import GemsMessage, is_rank_command, is_opt_out_command, is_opt_in_
 from communication import send_channel_message
 from constants import load_environment_variables
 from message_gems_decorator import replace_gem_template_with_real_gem
-from dynamo import (get_monthly_rank, insert_gem_to_dynamo, insert_opt_out, is_receiver_available,
+from dynamo import (get_monthly_rank, has_receiver_opted_out, insert_gem_to_dynamo, insert_opt_out,
                     remove_opt_out, sender_gem_count_today, sender_to_receiver_gem_count_today)
 
 PING_PONG = {"type": 1}
@@ -89,7 +89,7 @@ def gem_handler(body: Dict[str, Any], env_vars):
         gems_message: GemsMessage = GemsMessage.from_slash_command(body)
         LOGGER.info(f"Gem message: {gems_message}")
 
-        if not is_receiver_available(gems_message.receiver_discord_id):
+        if not has_receiver_opted_out(gems_message.receiver_discord_id):
             return slash_command_response(f"""
                 **:pleading_face: {gems_message.receiver_discord_id} has chosen solitude and is temporarily not receiving any gems. 
                 Thank you for the acknowledgment, by the way :heart:**
@@ -161,7 +161,7 @@ def self_gem(gems_message: GemsMessage):
 
 def handle_opt_out(user_discord_id: str):
     """Opt-out user from receiving gems"""
-    if is_receiver_available(user_discord_id):
+    if has_receiver_opted_out(user_discord_id):
         expire_on = insert_opt_out(user_discord_id)
         expire_on_readable = datetime.datetime.fromtimestamp(expire_on).strftime('%d-%m-%Y')
         return slash_command_response(f"**:pleading_face: You have successfully opted out of receiving gems, effective until {expire_on_readable}**")
@@ -170,7 +170,7 @@ def handle_opt_out(user_discord_id: str):
 
 def handle_opt_in(user_discord_id: str):
     """Opt-in again"""
-    if not is_receiver_available(user_discord_id):
+    if not has_receiver_opted_out(user_discord_id):
         remove_opt_out(user_discord_id)
         return slash_command_response("**:star_struck: You have successfully opted in to receive gems**")
     return slash_command_response(f"**:star_struck: You are already opted in**")
