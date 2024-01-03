@@ -92,7 +92,7 @@ def gem_handler(body: Dict[str, Any], env_vars):
         LOGGER.info(f"Gem message: {gems_message}")
 
         if not has_receiver_opted_out(gems_message.receiver_discord_id):
-            receiver = gems_message.receiver_username if hasattr(gems_message, 'receiver_username') else 'Receiver'
+            receiver = gems_message.receiver_username if hasattr(gems_message, 'receiver_username') else 'Recipient'
             return slash_command_response(f"""
                 **:pleading_face: {receiver} has chosen solitude and is temporarily not receiving any gems. 
                 Thank you for the acknowledgment, by the way :heart:**
