@@ -1,8 +1,11 @@
 name: 'Deploy Infrastructure'
 
 on:
-  push:
+  workflow_run:
+    workflows: ["Quality Check"]
     branches: [master]
+    types: 
+      - completed
 
 permissions:
   contents: read

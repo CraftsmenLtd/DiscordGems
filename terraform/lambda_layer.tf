@@ -1,5 +1,5 @@
 locals {
-  lambda_python_version     = "python3.8"
+  lambda_python_version     = "python3.12"
   requirements_filepath     = "${path.module}/../requirements.txt"
   lambda_layer_zipfile_name = "craftsmen-bot-layer"
 

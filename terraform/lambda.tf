@@ -42,7 +42,7 @@ resource "aws_lambda_function" "lambda_functions" {
   layers                         = [aws_lambda_layer_version.lambda_layer.arn]
   publish                        = lookup(each.value, "publish_lambda", false)
   reserved_concurrent_executions = lookup(each.value, "reserved_concurrency", -1)
-  architectures                  = ["x86_64"]
+  architectures                  = ["arm64"]
   environment {
     variables = lookup(each.value, "env_variables", {})
   }

@@ -16,6 +16,14 @@ validate-terraform:
 	terraform -chdir=terraform validate
 .PHONY: validate-terraform
 
+lint-terraform:
+	terraform -chdir=terraform fmt
+.PHONY: lint-terraform
+
+run-tests:
+	pytest -s
+.PHONY: run-tests
+
 deploy:
 	terraform -chdir=terraform init -input=false $(TF_BACKEND_CONFIG)
 	terraform -chdir=terraform plan -input=false -out=tfplan-apply $(TF_VARS)
