@@ -21,7 +21,6 @@ jobs:
   check-code:
     name: Check Code
     runs-on: ubuntu-22.04
-    environment: production
 
     steps:
     - name: Checkout Branch

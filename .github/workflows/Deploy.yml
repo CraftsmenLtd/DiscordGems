@@ -40,7 +40,6 @@ jobs:
   deploy-terraform:
     name: Deploy Terraform
     runs-on: ubuntu-22.04
-    environment: production
 
     steps:
     - name: Checkout Branch

@@ -138,8 +138,7 @@ def self_gem(gems_message: GemsMessage):
         return slash_command_response(
             f"**{emojis.FACE_HOLDING_BACK_TEARS} {gems_message.sender_username} to **"
             f"themselves; they must've needed this one but we don't judge: "
-            f"{replace_gem_template_with_real_gem(gems_message.gem_message,
-                                                  gems_message.gem_count)}"
+            f"{replace_gem_template_with_real_gem(gems_message.gem_message, gems_message.gem_count)}"
         )
     return slash_command_response(f"**{emojis.X} You can not give more than one {emojis.GEM}s to yourself in one day {emojis.X}**")
 
