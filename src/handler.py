@@ -14,6 +14,8 @@ from message_gems_decorator import replace_gem_template_with_real_gem
 from dynamo import (get_monthly_rank, has_receiver_opted_out, insert_gem_to_dynamo, insert_opt_out,
                     remove_opt_out, sender_gem_count_today, sender_to_receiver_gem_count_today)
 
+import emojis
+
 PING_PONG = {"type": 1}
 MAX_GEMS_TO_SELF_PER_DAY = 1
 
@@ -46,7 +48,7 @@ def handler(event, _):
     return gem_handler(body, env_vars)
 
 
-def _trigger_from_cron(event: Dict[str, Any], monthly_cron_rule) -> bool:
+def _trigger_from_cron(event: Dict[str, Any], monthly_cron_rule: str) -> bool:
     resources: List[str] = event.get("resources", [])
     return monthly_cron_rule in resources and event.get("source") == "aws.events"
 
@@ -71,7 +73,7 @@ def gem_handler(body: Dict[str, Any], env_vars):
     gems_channel: Optional[str] = env_vars.discord_gems_channel
     if gems_channel and body.get("channel_id") != gems_channel:
         return slash_command_response(
-            f"**:currency_exchange: Use channel <#{env_vars.discord_gems_channel}> to give 💎s :currency_exchange:**"
+            f"**{emojis.CURRENCY_EXCHANGE} Use channel <#{env_vars.discord_gems_channel}> to give {emojis.GEM}s {emojis.CURRENCY_EXCHANGE}**"
         )
 
     try:
@@ -100,10 +102,10 @@ def gem_handler(body: Dict[str, Any], env_vars):
             return self_gem(gems_message)
 
         if gems_message.is_invalid_receiver:
-            return slash_command_response("**:x: Invalid 💎s receiver :x:**")
+            return slash_command_response(f"**{emojis.X} Invalid {emojis.GEM}s receiver {emojis.X}**")
 
         if not gems_message.gem_count:
-            return slash_command_response("**:x: No 💎s found in message :x:**")
+            return slash_command_response(f"**{emojis.X} No {emojis.GEM}s found in message {emojis.X}**")
 
         max_gem: int = int(env_vars.max_gems_per_day)
         gems_today: int = sender_gem_count_today(
@@ -111,17 +113,17 @@ def gem_handler(body: Dict[str, Any], env_vars):
         if gems_today + gems_message.gem_count <= max_gem:
             insert_gem_to_dynamo(gems_message)
             return slash_command_response(
-                f"**:heart_eyes: {gems_message.sender_username} to **"
+                f"**{emojis.HEART_EYES} {gems_message.sender_username} to **"
                 f"<@{gems_message.receiver_discord_id}>: "
                 f"{replace_gem_template_with_real_gem(gems_message.gem_message, gems_message.gem_count)}"
             )
         return slash_command_response(
-            f"**:1234: You have {max_gem - gems_today} 💎(s) left for today :1234:**"
+            f"**{emojis.NUMBERS} You have {max_gem - gems_today} {emojis.GEM}(s) left for today {emojis.NUMBERS}**"
         )
     except Exception as error:
         LOGGER.error(f"Command failed with {error}")
 
-    return slash_command_response("**:man_shrugging: Message parsing failed. Please contact with admin :man_shrugging:**")
+    return slash_command_response(f"**{emojis.MAN_SHRUGGING} Message parsing failed. Please contact with admin {emojis.MAN_SHRUGGING}**")
 
 
 def _get_sender_discord_id(body: Dict[str, Any]):
@@ -137,7 +139,7 @@ def _handle_trigger_from_cron(env_vars):
     rank: Dict[str, int] = get_monthly_rank(month, last_month_last_day.year)
 
     message: str = _rank_message(
-        rank, f"**:calendar: Top members of {calendar.month_name[month]} :calendar:**")
+        rank, f"**{emojis.CALENDAR} Top members of {calendar.month_name[month]} {emojis.CALENDAR}**")
 
     send_channel_message(
         env_vars.discord_bot_token,
@@ -153,11 +155,11 @@ def self_gem(gems_message: GemsMessage):
     if total_gems_given_to_self < MAX_GEMS_TO_SELF_PER_DAY:
         insert_gem_to_dynamo(gems_message)
         return slash_command_response(
-            f"**:face_holding_back_tears: {gems_message.sender_username} to **"
+            f"**{emojis.FACE_HOLDING_BACK_TEARS} {gems_message.sender_username} to **"
             f"themselves; they must've needed this one but we don't judge: "
             f"{replace_gem_template_with_real_gem(gems_message.gem_message, gems_message.gem_count)}"
         )
-    return slash_command_response("**:x: You can not give more than one 💎s to yourself in one day :x:**")
+    return slash_command_response(f"**{emojis.X} You can not give more than one {emojis.GEM}s to yourself in one day {emojis.X}**")
 
 
 def handle_opt_out(user_discord_id: str):
@@ -184,13 +186,13 @@ def handle_rank_command():
         today.month, today.year
     )
     message: str = _rank_message(
-        rank, "**:heart_hands: Top 5 most appreciated :gem:s this month :heart_hands:**")
+        rank, f"**{emojis.HEART_HANDS} Top 5 most appreciated {emojis.GEM}s this month {emojis.HEART_HANDS}**")
     return slash_command_response(message)
 
 
 def _rank_message(rank: Dict[str, int], headline: str, max_count: int = 5) -> str:
     if not rank:
-        message: str = "No 💎s found to rank 😢"
+        message: str = f"No {emojis.GEM}s found to rank {emojis.CRY}"
     else:
         message: str = f"{headline}"
         top_rank_count: int = 0

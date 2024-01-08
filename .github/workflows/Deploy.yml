@@ -1,8 +1,11 @@
 name: 'Deploy Infrastructure'
 
 on:
-  push:
+  workflow_run:
+    workflows: ["Quality Check"]
     branches: [master]
+    types: 
+      - completed
 
 permissions:
   contents: read
@@ -37,7 +40,6 @@ jobs:
   deploy-terraform:
     name: Deploy Terraform
     runs-on: ubuntu-22.04
-    environment: production
 
     steps:
     - name: Checkout Branch

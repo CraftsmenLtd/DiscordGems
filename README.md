@@ -10,7 +10,10 @@ https://emojipedia.org/gem-stone
 For discord the short code is :gem:
 
 ## Our Commands
-- `/gem appreciate <a_user> <a message containing 💎 emojis>`: Must include :gem: emoji. You can have up to `max_gems_per_day` :gem: emojis in the message
+- `/gem appreciate <a_user> <a message containing gems-5>`: Must include gems-<number of gems you want to give>. You can have up to `max_gems_per_day` :gem: emojis in the message. Example
+```
+/gem appreciate SuperDuperDiscordUser gems-5 for always being available to chat
+```
 - `/gem rank`: Ranks the 💎 leader board
 - `/gem opt-out`: Use this command to opt-out of receiving 💎 appreciations.
 - `/gem opt-in`: Use this command to opt-in again for receiving 💎 appreciations after opting out.

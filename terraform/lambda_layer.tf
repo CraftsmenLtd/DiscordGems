@@ -1,5 +1,5 @@
 locals {
-  lambda_python_version     = "python3.8"
+  lambda_python_version     = "python3.10"
   requirements_filepath     = "${path.module}/../requirements.txt"
   lambda_layer_zipfile_name = "craftsmen-bot-layer"
 
@@ -14,7 +14,8 @@ resource "null_resource" "build_lambda_layer" {
   }
 
   triggers = {
-    run_when = filemd5(local.requirements_filepath)
+    run_when_dependency = filemd5(local.requirements_filepath)
+    run_when_source     = sha1(join("", [for f in fileset(path.root, "${path.module}/../src/**") : filesha1(f)]))
   }
 }
 
