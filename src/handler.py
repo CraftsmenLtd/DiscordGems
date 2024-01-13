@@ -93,10 +93,7 @@ def gem_handler(body: Dict[str, Any], env_vars):
 
         if has_receiver_opted_out(gems_message.receiver_discord_id):
             receiver = gems_message.receiver_username if hasattr(gems_message, 'receiver_username') else 'Recipient'
-            return slash_command_response(f"""
-                **{emojis.PLEADING_FACE} {receiver} has chosen solitude and is temporarily not receiving any gems. 
-                Thank you for the acknowledgment, by the way {emojis.HEART}**
-            """)
+            return slash_command_response(f"**{emojis.PLEADING_FACE} {receiver} has chosen solitude and is temporarily not receiving any gems. Thank you for your acknowledgment {emojis.HEART}**")
 
         if gems_message.sender_discord_id == gems_message.receiver_discord_id:
             return self_gem(gems_message)
