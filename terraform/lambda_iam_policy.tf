@@ -52,6 +52,7 @@ data "aws_iam_policy_document" "discord_gems_policy" {
       "dynamodb:Scan",
       "dynamodb:Query",
       "dynamodb:PutItem",
+      "dynamodb:DeleteItem",
       "dynamodb:DescribeTable",
     ]
     resources = [
